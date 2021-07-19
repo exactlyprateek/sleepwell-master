@@ -34,50 +34,64 @@ const TermsNConditions = () => {
 	const [ disabled, setDisabled ] = useState(true);
 
 	//
-	const clickOnDelete = (index) => {
-		confirmAlert({
-			title: 'Are you sure?',
-			message: 'You want to delete this item?',
-			buttons: [
-				{
-					label: 'Yes, Delete it',
-					onClick: () => deleteTerms(index)
-				},
-				{
-					label: 'No'
-					// onClick: () => alert('Click No')
-				}
-			]
-		});
+	const clickOnDelete = (id, index) => {
+		if (id > 0) {
+			confirmAlert({
+				title: 'Are you sure?',
+				message: 'You want to delete this item?',
+				buttons: [
+					{
+						label: 'Yes, Delete it',
+						onClick: () => deleteTerms(id)
+					},
+					{
+						label: 'No'
+						// onClick: () => alert('Click No')
+					}
+				]
+			});
+		} else {
+			termsConditionsSections.splice(index, 1);
+			setTermsConditionsSections([ ...termsConditionsSections ]);
+		}
 	};
 	//* call delete api
 	const deleteTerms = (index) => {
-        termsConditionsSections.splice(index,1);
-        let arr = termsConditionsSections;
-        setTermsConditionsSections(arr);
-        console.log(arr);
-        let formdata = new FormData();
-        formdata.append("title", title);
-        formdata.append("description", description);
-        formdata.append("sections", arr);
-        for(var pair of formdata.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]);
-         }
 		axios({
-            url:`http://markbran.in/apis/admin/termsConditions`,
-            method: "post",
-            data: formdata
-        })
+			url: `http://markbran.in/apis/admin/termsConditions/` + index,
+			method: 'delete',
+			headers: {
+				'auth-token': jwtToken //the token is a variable which holds the token
+			}
+		})
 			.then(function(response) {
-				console.log(response)
+				console.log(response);
 				getTnc();
 			})
 			.catch(function(error) {
-				console.error(error)
+				console.error(error);
 			});
 	};
 	const updateTnC = (e) => {
-		console.log(e);
+		console.log({ title: title, desc: description, sections: termsConditionsSections });
+		console.log(termsConditionsSections)
+		let formData = new FormData();
+		formData.append('title', title);
+		formData.append('description', description);
+		formData.append('sections', JSON.stringify(termsConditionsSections));
+
+		axios({
+			url: 'http://markbran.in/apis/admin/termsConditions',
+			method: 'POST',
+			headers: {
+				'auth-token': jwtToken //the token is a variable which holds the token
+			},
+			data: formData
+		})
+			.then(function(response) {
+				console.log(response);
+			})
+			.catch((err) => console.log(err));
 	};
 	const getTnc = () => {
 		axios
@@ -120,9 +134,6 @@ const TermsNConditions = () => {
 						>
 							Edit
 						</CLink>
-						<CLink style={{ float: 'right' }} onClick={updateTnC} className="btn btn-success">
-							Save Changes
-						</CLink>
 					</CCardHeader>
 					<CCardBody>
 						{showAlertSuccess ? (
@@ -162,7 +173,8 @@ const TermsNConditions = () => {
 										<CInputGroup className="mb-3">
 											{/* <CInput type="text" onChange={goingGreenSectionTitleOnChange} value={goingGreenSectionTitle} placeholder="Title" autoComplete="title" /> */}
 											<CTextarea
-                                            rows="4" cols="50"
+												rows="4"
+												cols="50"
 												disabled={disabled}
 												value={description}
 												onChange={(e) => setDescription(e.target.value)}
@@ -191,20 +203,40 @@ const TermsNConditions = () => {
 							</thead>
 							<tbody>
 								{termsConditionsSections.map((item, index) => (
-									<tr key={index + 1}>
+									<tr key={item.id}>
 										<th scope="row">{index + 1}</th>
 										<td>
-											<CTextarea rows="4" cols="50" disabled={disabled} value={item.heading} />
+											<CTextarea
+												rows="4"
+												cols="50"
+												disabled={disabled}
+												value={item.heading}
+												onChange={(e) => {
+													termsConditionsSections[index].heading = e.target.value;
+													setTermsConditionsSections([ ...termsConditionsSections ]);
+												}}
+											/>
 										</td>
 										<td>
-											<CTextarea rows="4" cols="50"  disabled={disabled} value={item.description} />
+											<CTextarea
+												rows="4"
+												cols="50"
+												disabled={disabled}
+												value={item.description}
+												onChange={(e) => {
+													termsConditionsSections[index].description = e.target.value;
+													setTermsConditionsSections([ ...termsConditionsSections ]);
+												}}
+											/>
 										</td>
 
 										{/* <td>{item.status ? 'Anabel' : 'Disable'}</td> */}
 										{/* <td>{dateFormat(item.createdAt, 'mmmm dS, yyyy')}</td> */}
 										<td>
 											<button
-												onClick={() => {clickOnDelete(index)}}
+												onClick={() => {
+													clickOnDelete(item.id, index);
+												}}
 												type="button"
 												className="btn btn-sm btn-outline-danger"
 											>
@@ -220,14 +252,18 @@ const TermsNConditions = () => {
 							onClick={() => {
 								setTermsConditionsSections([
 									...termsConditionsSections,
-									{ heading: '', description: '', status: 1 }
+									{ id: -1, heading: '', description: '', status: 1 }
 								]);
 								console.log(termsConditionsSections);
 							}}
-							className="btn btn-success mr-4"
+							className="btn btn-warning ml-4"
 						>
 							Add New
 						</button>
+
+						<CLink style={{ float: 'right' }} onClick={updateTnC} className="btn btn-success ml-2">
+							Save Changes
+						</CLink>
 					</CCardBody>
 				</CCard>
 			</CCol>

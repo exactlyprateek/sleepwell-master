@@ -69,7 +69,7 @@ const Innovation = () => {
             }
         })
             .then(function (response) {
-                console.log(response.data);
+                // console.log(response.data);
                 setInnovationCard(response.data.innovationCards);
             })
             .catch(function (error) {
@@ -124,7 +124,7 @@ const Innovation = () => {
                                         <th scope="row">{index+1}</th>
                                         <td>{item.title}</td>
                                         <td><img src={process.env.REACT_APP_BASE_URL + item.image} alt="Innovation" width="150px0" /></td>
-                                        <td>{item.description}</td>
+                                        <td style={{maxWidth:"50vw"}}>{item.description}</td>
                                         <td>{dateFormat(item.createdAt, "mmmm dS, yyyy")}</td>
                                         <td>
                                             <CLink className="btn btn-sm btn-outline-warning" to={`/innovation-card/edit/${item.id}`}>

@@ -122,7 +122,7 @@ const Categories = () => {
                                             <CLink className="btn btn-sm btn-outline-warning" to={`/category-management/edit-category/${item.id}`}>
                                                 Edit
                                             </CLink>
-                                            <button onClick={() => clickOnDelete(item.id)} type="button" className="btn btn-sm btn-outline-danger">Delete</button>
+                                            {/* <button onClick={() => clickOnDelete(item.id)} type="button" className="btn btn-sm btn-outline-danger">Delete</button> */}
                                         </td>
                                     </tr>
                                 ) }

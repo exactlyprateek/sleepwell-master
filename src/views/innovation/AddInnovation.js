@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {
-    // CButton,
     CCard,
     CCardBody,
     CCardHeader,
@@ -9,7 +8,6 @@ import {
     CFormGroup,
     CFormText,
     CInput,
-    CLink,
     CInputFile,
     CInputGroup,
     CLabel,
@@ -24,8 +22,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useHistory } from 'react-router';
 import { Multiselect } from 'multiselect-react-dropdown';
 import Switch from "react-switch";
-
-import CkEditor from '../../components/CkEditor5.js';
 const axios = require('axios').default;
 
 const schema = yup.object().shape({
@@ -49,8 +45,10 @@ const AddInnovation = () => {
     let jwtToken = sessionStorage.getItem("token");
 
     
-    const advantageOnSelect = (value) => {
-        setAdvantagesArray(value)
+    const advantageOnSelect = (e) => {
+        // console.log(e);
+        setAdvantages((e.map((i, idx) => i.id.toString())));
+        // console.log(advantages);
         // const list = [...inputList];
         // list[index]['advantagesArray'] = value;
         // setInputList(list);
@@ -63,23 +61,23 @@ const AddInnovation = () => {
         // setInputList(list);
     }
 
-    const handleDescription = (data) => {
-        // console.log(data)
-        setDescription(data);
+    const handleDescription = (e) => {
+        console.log(e.target.value)
+        setDescription(e.target.value);
     }
     const handleShowInHomeOnchange = (data) => {
-        // console.log(data)
+        console.log(data)
         setShowInHome(data);
     }
     
     //* change dynamic input fields   
-    const handleChange = (e, index) => {
-        const {name, value, files} = e.target;
-        console.log(value);
-        const list = [...inputList];
-        list[index][name] = files ? files[0] : value;
-        setInputList(list);
-    }
+    // const handleChange = (e, index) => {
+    //     const {name, value, files} = e.target;
+    //     console.log(value);
+    //     const list = [...inputList];
+    //     list[index][name] = files ? files[0] : value;
+    //     setInputList(list);
+    // }
 
     //* Add dynamic input fields
     const handleAddInput = () => {
@@ -88,16 +86,16 @@ const AddInnovation = () => {
     }
 
     //* remove dynamic input fields
-    const handleRemoveInputs = (index) => {
-        const list = [...inputList];
-        list.splice(index, 1);
-        setInputList(list);
-    }
+    // const handleRemoveInputs = (index) => {
+    //     const list = [...inputList];
+    //     list.splice(index, 1);
+    //     setInputList(list);
+    // }
     
-    //* description
-    const descriptionOnChange = (e) => {
-        setSectionDescription(e.target.value);
-    }
+    // //* description
+    // const descriptionOnChange = (e) => {
+    //     setSectionDescription(e.target.value);
+    // }
 
     //* image
     const imageOnChange = (e) => {
@@ -112,7 +110,7 @@ const AddInnovation = () => {
         })
             .then(function (response) {
                 // console.log(response.data.advantages);
-                setAdvantages(response.data.advantages);
+                setAdvantagesArray(response.data.advantages);
                 // const list = [...inputList];
                 // list[0]['advantagesArray'] = response.data.advantages;
                 // setInputList(list);
@@ -139,9 +137,10 @@ const AddInnovation = () => {
         formData.append('status', status);
         formData.append('title', e.sectionTitle);
         formData.append('image', innovationImage);
-        formData.append('advantages', advantagesArray);
+        formData.append('advantages', JSON.stringify(advantages));
         formData.append('description', description);
-        formData.append('showInHome', homeCheckbox);
+        formData.append('addToHome', homeCheckbox);
+       
         // formData.append('isFeatured', isFeatured);
         // formData.append('sectionSubTitle', e.sectionSubTitle);
         // formData.append('rightDescription', e.rightDescription);
@@ -157,20 +156,20 @@ const AddInnovation = () => {
             }
         })
             .then(res => {
-                setLoading(false);
                 // setUserSession(response.data.token, response.data.user);
                 history.push('/innovation-card')
                 console.log(res.response.data);
             })
             .catch(err => {
                 // console.log(err.response.data.message);
-                setLoading(false);
                 if (err.response && err.response.data.message) {
                     setError(err.response.data.message);
                 } else {
                     setError("Something went wrong!");
                 }
-            });
+            }).finally(()=>
+            setLoading(false)
+            );
     }
 
     return (
@@ -249,8 +248,8 @@ const AddInnovation = () => {
                                             <CInputGroup className="mb-3">
                                                 <Multiselect
                                                     // options={item.advantagesArray} // Options to display in the dropdown
-                                                    options={advantages} // Options to display in the dropdown
-                                                    // selectedValues={item.advantagesArray} // Preselected value to persist in dropdown
+                                                    options={advantagesArray} // Options to display in the dropdown
+                                                    selectedValues={advantagesArray.filter((i,index) => ( advantages.toString().includes(i.id) ))} // Preselected value to persist in dropdown
                                                     // onSelect={advantageOnSelect} // Function will trigger on select event
                                                     onSelect={e => advantageOnSelect(e)}
                                                     name="advantagesArray"
@@ -266,7 +265,7 @@ const AddInnovation = () => {
                                     <CCol xl="12">
                                         <CFormGroup>
                                             <CLabel htmlFor="category">Description</CLabel>
-                                            <CkEditor onEditorValue={handleDescription} />
+                                            <CTextarea value={description} onChange={e => setDescription(e.target.value)} />
                                             {/* <CFormText className="help-block text-danger" color="red">{errors.description && errors.description.message}</CFormText> */}
                                         </CFormGroup>
                                     </CCol>

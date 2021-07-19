@@ -643,13 +643,21 @@ const _nav = [
                 _tag: 'CSidebarNavItem',
                 name: 'Service Cards',
                 to: '/service-card',
+            },{
+                _tag: 'CSidebarNavItem',
+                name: 'Service Category',
+                to: '/service-category',
             },
             {
                 _tag: 'CSidebarNavItem',
                 name: 'Pages',
                 to: '/service-page',
             },
-            {
+             {
+                _tag: 'CSidebarNavItem',
+                name: 'Sub Pages',
+                to: '/service-sub-page',
+            },{
                 _tag: 'CSidebarNavItem',
                 name: 'Services At Home',
                 to: '/services-at-home',

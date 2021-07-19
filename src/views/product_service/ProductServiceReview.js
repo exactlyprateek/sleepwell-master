@@ -26,10 +26,10 @@ const ProductServiceReview = () => {
 
     const jwtToken = sessionStorage.getItem("token");
 
-    const onChangeIsActive = (e, id) => {
-        console.log(e, id);
-        setIsActive(e);
-        updateStatus(id, e);
+    const onChangeIsActive = (id) => {
+        // console.log(id);
+        // setIsActive(!isActive);
+        updateStatus(id);
     }
 
     // 
@@ -63,11 +63,11 @@ const ProductServiceReview = () => {
             })
     }
     // * update status
-    const updateStatus = (reviewId, value) => {
+    const updateStatus = (reviewId) => {
         const formData = new FormData();
         let status = isActive ? 1 : 0;
-        console.log(value, status);
-        formData.append('status', status);
+        console.log(status);
+        formData.append('status', (!isActive ? 1 : 0).toString());
         axios.post(`http://markbran.in/apis/admin/review/${reviewId}`, formData, {
             headers: {
                 "auth-token": jwtToken //the token is a variable which holds the token
@@ -76,7 +76,7 @@ const ProductServiceReview = () => {
             .then(response => {
                 // setLoading(false);
                 // history.push('/sizes')
-                // // console.log(response);
+                console.log(response);
                 // setError(null);
                 setShowAlertSuccess(true);
                 setShowAlertDanger(false);
@@ -170,7 +170,7 @@ const ProductServiceReview = () => {
                                         <td>{item.productName}</td>
                                         <td>{item.description}</td>
                                         <td>
-                                            <Switch onChange={(e) => onChangeIsActive(e, item.id)} checked={isActive} />
+                                            <Switch onChange={() => onChangeIsActive(item.id)} checked={isActive} />
                                         </td>
                                         <td>{dateFormat(item.createdAt, "mmmm dS, yyyy")}</td>
                                         <td>

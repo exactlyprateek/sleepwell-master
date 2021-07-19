@@ -1,72 +1,73 @@
-import React, { Fragment} from 'react';
+import React, { Fragment } from 'react';
 
 const Toaster = React.lazy(() => import('./views/notifications/toaster/Toaster'));
-const Tables  = React.lazy(() => import('./views/base/tables/Tables'));
+const Tables = React.lazy(() => import('./views/base/tables/Tables'));
 
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'));
-const Cards       = React.lazy(() => import('./views/base/cards/Cards'));
-const Carousels   = React.lazy(() => import('./views/base/carousels/Carousels'));
-const Collapses   = React.lazy(() => import('./views/base/collapses/Collapses'));
-const BasicForms  = React.lazy(() => import('./views/base/forms/BasicForms'));
+const Cards = React.lazy(() => import('./views/base/cards/Cards'));
+const Carousels = React.lazy(() => import('./views/base/carousels/Carousels'));
+const Collapses = React.lazy(() => import('./views/base/collapses/Collapses'));
+const BasicForms = React.lazy(() => import('./views/base/forms/BasicForms'));
 
-const Jumbotrons  = React.lazy(() => import('./views/base/jumbotrons/Jumbotrons'));
-const ListGroups  = React.lazy(() => import('./views/base/list-groups/ListGroups'));
-const Navbars     = React.lazy(() => import('./views/base/navbars/Navbars'));
-const Navs        = React.lazy(() => import('./views/base/navs/Navs'));
+const Jumbotrons = React.lazy(() => import('./views/base/jumbotrons/Jumbotrons'));
+const ListGroups = React.lazy(() => import('./views/base/list-groups/ListGroups'));
+const Navbars = React.lazy(() => import('./views/base/navbars/Navbars'));
+const Navs = React.lazy(() => import('./views/base/navs/Navs'));
 const Paginations = React.lazy(() => import('./views/base/paginations/Pagnations'));
-const Popovers    = React.lazy(() => import('./views/base/popovers/Popovers'));
+const Popovers = React.lazy(() => import('./views/base/popovers/Popovers'));
 const ProgressBar = React.lazy(() => import('./views/base/progress-bar/ProgressBar'));
-const Switches    = React.lazy(() => import('./views/base/switches/Switches'));
+const Switches = React.lazy(() => import('./views/base/switches/Switches'));
 
-const Tabs            = React.lazy(() => import('./views/base/tabs/Tabs'));
-const Tooltips        = React.lazy(() => import('./views/base/tooltips/Tooltips'));
-const BrandButtons    = React.lazy(() => import('./views/buttons/brand-buttons/BrandButtons'));
+const Tabs = React.lazy(() => import('./views/base/tabs/Tabs'));
+const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'));
+const BrandButtons = React.lazy(() => import('./views/buttons/brand-buttons/BrandButtons'));
 const ButtonDropdowns = React.lazy(() => import('./views/buttons/button-dropdowns/ButtonDropdowns'));
-const ButtonGroups    = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'));
-const Buttons         = React.lazy(() => import('./views/buttons/buttons/Buttons'));
-const Charts          = React.lazy(() => import('./views/charts/Charts'));
-const Dashboard       = React.lazy(() => import('./views/dashboard/Dashboard'));
-const CoreUIIcons     = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'));
-const Flags           = React.lazy(() => import('./views/icons/flags/Flags'));
-const Brands          = React.lazy(() => import('./views/icons/brands/Brands'));
-const Alerts          = React.lazy(() => import('./views/notifications/alerts/Alerts'));
-const Badges          = React.lazy(() => import('./views/notifications/badges/Badges'));
-const Modals          = React.lazy(() => import('./views/notifications/modals/Modals'));
-const Colors          = React.lazy(() => import('./views/theme/colors/Colors'));
-const Typography      = React.lazy(() => import('./views/theme/typography/Typography'));
-const Widgets         = React.lazy(() => import('./views/widgets/Widgets'));
-const Users           = React.lazy(() => import('./views/users/Users'));
-const User            = React.lazy(() => import('./views/users/User'));
-const AddUser         = React.lazy(() => import('./views/users/AddUser'));
-const Products        = React.lazy(() => import('./views/product/Products'));
-const AddProduct      = React.lazy(() => import('./views/product/AddProduct'));
-const Categories      = React.lazy(() => import('./views/category/Categories'));
-const AddCategory     = React.lazy(() => import('./views/category/AddCategory'));
-const EditCategory    = React.lazy(() => import('./views/category/EditCategory'));
-const SubCategory     = React.lazy(() => import('./views/subCategory/SubCategory'));
-const AddSubCategory  = React.lazy(() => import('./views/subCategory/AddSubCategory'));
+const ButtonGroups = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'));
+const Buttons = React.lazy(() => import('./views/buttons/buttons/Buttons'));
+const Charts = React.lazy(() => import('./views/charts/Charts'));
+const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
+const CoreUIIcons = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'));
+const Flags = React.lazy(() => import('./views/icons/flags/Flags'));
+const Brands = React.lazy(() => import('./views/icons/brands/Brands'));
+const Alerts = React.lazy(() => import('./views/notifications/alerts/Alerts'));
+const Badges = React.lazy(() => import('./views/notifications/badges/Badges'));
+const Modals = React.lazy(() => import('./views/notifications/modals/Modals'));
+const Colors = React.lazy(() => import('./views/theme/colors/Colors'));
+const Typography = React.lazy(() => import('./views/theme/typography/Typography'));
+const Widgets = React.lazy(() => import('./views/widgets/Widgets'));
+const Users = React.lazy(() => import('./views/users/Users'));
+const User = React.lazy(() => import('./views/users/User'));
+const AddUser = React.lazy(() => import('./views/users/AddUser'));
+const Products = React.lazy(() => import('./views/product/Products'));
+const AddProduct = React.lazy(() => import('./views/product/AddProduct'));
+const EditProduct = React.lazy(() => import('./views/product/EditProduct'));
+const Categories = React.lazy(() => import('./views/category/Categories'));
+const AddCategory = React.lazy(() => import('./views/category/AddCategory'));
+const EditCategory = React.lazy(() => import('./views/category/EditCategory'));
+const SubCategory = React.lazy(() => import('./views/subCategory/SubCategory'));
+const AddSubCategory = React.lazy(() => import('./views/subCategory/AddSubCategory'));
 const EditSubCategory = React.lazy(() => import('./views/subCategory/EditSubCategory'));
 // const SubSubCategory  = React.lazy(() => import('./views/cateLevel3/SubSubCategory'));
 // const AddSubSubCategory = React.lazy(() => import('./views/cateLevel3/AddSubSubCategory'));
-const Sizes         = React.lazy(() => import('./views/sizes/Size'));
-const AddSizes      = React.lazy(() => import('./views/sizes/AddSize'));
-const EditSizes     = React.lazy(() => import('./views/sizes/EditSizes'));
-const Thickness     = React.lazy(() => import('./views/thickness/Thickness'));
-const AddThickness  = React.lazy(() => import('./views/thickness/AddThickness'));
+const Sizes = React.lazy(() => import('./views/sizes/Size'));
+const AddSizes = React.lazy(() => import('./views/sizes/AddSize'));
+const EditSizes = React.lazy(() => import('./views/sizes/EditSizes'));
+const Thickness = React.lazy(() => import('./views/thickness/Thickness'));
+const AddThickness = React.lazy(() => import('./views/thickness/AddThickness'));
 const EditThickness = React.lazy(() => import('./views/thickness/EditThickness'));
-const Banners       = React.lazy(() => import('./views/banner/Banners'));
-const AddBanners    = React.lazy(() => import('./views/banner/AddBanners'));
-const EditBanner    = React.lazy(() => import('./views/banner/EditBanner'));
-const Permission     = React.lazy(() => import('./views/permision/Permission'));
-const AddPermission     = React.lazy(() => import('./views/permision/AddPermission'));
-const Newsletter    = React.lazy(() => import('./views/newsletter/Newsletter'));
-const Feedback      = React.lazy(() => import('./views/feedback/Feedback'));
-const Blog          = React.lazy(() => import('./views/blog/Blog'));
-const AddBlog       = React.lazy(() => import('./views/blog/AddBlog'));
-const EditBlog      = React.lazy(() => import('./views/blog/EditBlog'));
-const Benifits      = React.lazy(() => import('./views/benifit/Benifits'));
-const AddBenifit   = React.lazy(() => import('./views/benifit/AddBenifit'));
-const EditBenifit   = React.lazy(() => import('./views/benifit/EditBenifit'));
+const Banners = React.lazy(() => import('./views/banner/Banners'));
+const AddBanners = React.lazy(() => import('./views/banner/AddBanners'));
+const EditBanner = React.lazy(() => import('./views/banner/EditBanner'));
+const Permission = React.lazy(() => import('./views/permision/Permission'));
+const AddPermission = React.lazy(() => import('./views/permision/AddPermission'));
+const Newsletter = React.lazy(() => import('./views/newsletter/Newsletter'));
+const Feedback = React.lazy(() => import('./views/feedback/Feedback'));
+const Blog = React.lazy(() => import('./views/blog/Blog'));
+const AddBlog = React.lazy(() => import('./views/blog/AddBlog'));
+const EditBlog = React.lazy(() => import('./views/blog/EditBlog'));
+const Benifits = React.lazy(() => import('./views/benifit/Benifits'));
+const AddBenifit = React.lazy(() => import('./views/benifit/AddBenifit'));
+const EditBenifit = React.lazy(() => import('./views/benifit/EditBenifit'));
 const Advantages = React.lazy(() => import('./views/advantage/Advantages'));
 const AddAdvantage = React.lazy(() => import('./views/advantage/AddAdvantage'));
 const EditAdvantage = React.lazy(() => import('./views/advantage/EditAdvantage'));
@@ -151,9 +152,14 @@ const ReturnPolicy = React.lazy(() => import('./views/returnPolicy/ReturnPolicy'
 const AddReturnPolicy = React.lazy(() => import('./views/returnPolicy/AddReturnPolicy'));
 const EditReturnPolicy = React.lazy(() => import('./views/returnPolicy/EditReturnPolicy'));
 const ServiceCard = React.lazy(() => import('./views/serviceCard/ServiceCard'));
+const ServiceCategory = React.lazy(() => import('./views/servicePages/ServiceCategory'));
+const ServiceCategoryAdd = React.lazy(() => import('./views/servicePages/ServiceCategoryAdd'));
+const EditServiceCategory = React.lazy(() => import('./views/servicePages/EditServiceCategory'));
 const AddServiceCard = React.lazy(() => import('./views/serviceCard/AddServiceCard'));
 const EditServiceCard = React.lazy(() => import('./views/serviceCard/EditServiceCard'));
 const ServicesAtHome = React.lazy(() => import('./views/serviceAtHome/ServicesAtHome'));
+const ServiceSubPage = React.lazy(() => import('./views/serviceSubPages/ServiceSubPage'));
+const AddServiceSubPage = React.lazy(() => import('./views/serviceSubPages/AddServiceSubPage'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -194,12 +200,13 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
   { path: '/widgets', name: 'Widgets', component: Widgets },
-  
-  { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/add-user', exact: true,  name: 'Add Users', component: AddUser },
+
+  { path: '/users', exact: true, name: 'Users', component: Users },
+  { path: '/add-user', exact: true, name: 'Add Users', component: AddUser },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/products', exact: true, name: 'Products', component: Products },
   { path: '/add-product', exact: true, name: 'Add Products', component: AddProduct },
+  { path: '/edit-product/:id', exact: true, name: 'Edit Products', component: EditProduct },
   { path: '/category-management', exact: true, name: 'Category Management' },
   { path: '/categories', exact: true, name: 'Category', component: Categories },
   { path: '/add-category', exact: true, name: 'Add Category', component: AddCategory },
@@ -262,7 +269,7 @@ const routes = [
   { path: '/product-service-review', name: 'Product Service Review', component: ProductServiceReview, exact: true },
   { path: '/product-service-review/add', name: 'Product Service Review', component: AddProductServiceReview, exact: true },
   { path: '/terms-n-Conditions', name: 'Terms & Conditions', component: TermsNConditions, exact: true },
-  { path: '/terms-n-Conditions/add', name: 'Add Terms & Conditions', component: AddTermsNConditions, exact: true },
+  { path: '/terms-n-Conditions/add', name: 'Add Terms & Conditions', component: TermsNConditions, exact: true },
   // { path: '/terms-n-Conditions/:id', name: 'Edit Terms & Conditions', component: AddTermsNConditions, exact: true },
   { path: '/terms-n-Conditions/add/add-section', name: 'Add section', component: AddTermsSection, exact: true },
   { path: '/innovation-card', name: 'Innovation Card', component: Innovation, exact: true },
@@ -295,6 +302,8 @@ const routes = [
   { path: '/service-homepage/edit/:id', name: 'Edit service home page', component: EditServiceBanner, exact: true },
   { path: '/service-page', name: 'Service pages', component: ServicePage, exact: true },
   { path: '/service-page/add', name: 'Add service page', component: AddServicePage, exact: true },
+  { path: '/service-sub-page', name: 'Service Sub pages', component: ServiceSubPage, exact: true },
+  { path: '/service-sub-page/add', name: 'Add Service Sub page', component: AddServiceSubPage, exact: true },
   { path: '/best-seller', name: 'Best Seller', component: BestSeller, exact: true },
   { path: '/offer-management', name: 'Offer Management', component: OfferManagement, exact: true },
   { path: '/service-page/add/add-grid', name: 'Add grid', component: AddGrid, exact: true },
@@ -316,6 +325,9 @@ const routes = [
   { path: '/return-policy/add', name: 'Add Return policy', component: AddReturnPolicy, exact: true },
   { path: '/return-policy/edit/:id', name: 'Edit Return policy', component: EditReturnPolicy, exact: true },
   { path: '/service-card', name: 'Service Card', component: ServiceCard, exact: true },
+  { path: '/service-category', name: 'Service Category', component: ServiceCategory, exact: true },
+  { path: '/service-category/add', name: 'Add Service Category', component: ServiceCategoryAdd, exact: true },
+  { path: '/service-category/edit/:id', name: 'Edit Service Category', component: EditServiceCategory, exact: true },
   { path: '/service-card/add', name: 'Add Service Card', component: AddServiceCard, exact: true },
   { path: '/service-card/edit/:id', name: 'Edit Service Card', component: EditServiceCard, exact: true },
   { path: '/services-at-home', name: 'Services At Home', component: ServicesAtHome, exact: true },

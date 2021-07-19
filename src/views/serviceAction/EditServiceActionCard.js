@@ -32,16 +32,17 @@ const axios = require('axios').default;
 
 
 const EditServiceActionCard = () => {
-    let categoryId = useParams();
+    let card = useParams();
 
-    const { control, handleSubmit, setValue, register, formState: { errors } } = useForm({ mode: 'all' });
+    // const { control, handleSubmit, setValue, register, formState: { errors } } = useForm({ mode: 'all' });
     let history = useHistory();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
-    const [categoryState, setCategoryState] = useState([]);
-    const [category, setCategory] = useState('');
-    const [categoryImage, setCategoryImage] = useState('');
+    // const [categoryState, setCategoryState] = useState([]);
+    const [sortOrder, setSortOrder] = useState('');
+    const [image, setImage] = useState('');
+    const [title, setTitle] = useState('')
     const [buttonText, setButtonText] = useState('');
     const [buttonLink, setButtonLink] = useState('');
     const [description, setDescription] = useState('');
@@ -60,8 +61,8 @@ const EditServiceActionCard = () => {
     }
 
     //* category image
-    const categoryOnChange = (e) => {
-        setCategoryImage(e.target.files[0]);
+    const imageOnChange = (e) => {
+        setImage(e.target.files[0]);
     }
 
     //* freatured category
@@ -75,15 +76,22 @@ const EditServiceActionCard = () => {
 
     let jwtToken = sessionStorage.getItem("token");
     //* get category
-    const getCategoryAxios = () => {
-        axios.get(`http://markbran.in/apis/admin/category/${categoryId.id}`, {
+    const getActionCard = () => {
+        axios.get(`http://markbran.in/apis/admin/service-action-card/${card.id}`, {
             headers: {
                 'auth-token': jwtToken
             }
         })
-            .then(function (response) {
-                setCategoryState(response.data.category);
-                console.log(response.data.category)
+            .then(function (res) {
+                setImage(res.data.actionCard.image);
+                setTitle(res.data.actionCard.title);
+                setIsFeatured(res.data.actionCard.isFeatured);
+                setButtonLink(res.data.actionCard.buttonLink);
+                setButtonText(res.data.actionCard.buttonText);
+                setDescription(res.data.actionCard.description);
+                setSortOrder(res.data.actionCard.sortOrder);
+                setIsFeatured(res.data.actionCard.status?true:false);
+                console.log(res.data.actionCard);
             })
             .catch(function (error) {
                 // handle error
@@ -94,42 +102,37 @@ const EditServiceActionCard = () => {
     }
 
     useEffect(() => {
-        getCategoryAxios();
-        if (categoryState) {
-            setValue("category", categoryState.title)
-        }
-        setIsFeatured(categoryState.status);
-        setButtonLink(categoryState.buttonLink);
-        setButtonText(categoryState.buttonText);
-        setDescription(categoryState.description);
+        getActionCard();
+      
 
-    }, [categoryState.title, categoryState.status, categoryState.buttonLink, categoryState.buttonText, categoryState.description]);
+    }, []);
 
     const onHandlerSubmit = (e) => {
         const formData = new FormData();
-        formData.append('status', isFeatured);
-        formData.append('title', e.category);
-        formData.append('image', categoryImage);
+        formData.append('status', isFeatured?1:0);
+        formData.append('title', title);
+        formData.append('image', image);
         formData.append('buttonText', buttonText);
         formData.append('buttonLink', buttonLink);
+        formData.append('sortOrder', sortOrder);
         formData.append('description', description);
         // console.log('value', value.categoryName);
         setError(null);
         setLoading(true);
 
-        axios.patch(`http://markbran.in/apis/admin/category/${categoryId.id}`, formData, {
+        axios.patch(`http://markbran.in/apis/admin/service-action-card/${card.id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'auth-token': jwtToken
             }
         })
             .then(response => {
-                setLoading(false);
-                history.push('/categories')
-                // console.log(response);
+                
+                history.push('/service-action/')
+                console.log(response);
             })
             .catch(err => {
-                setLoading(false);
+               
                 // console.log(err.response);
                 if (err.response) {
                     if (err.response.data.errorMessage) {
@@ -140,7 +143,7 @@ const EditServiceActionCard = () => {
                 } else {
                     setError("Something went wrong!");
                 }
-            });
+            }).finally(() =>  setLoading(false));
     }
 
     return (
@@ -152,7 +155,7 @@ const EditServiceActionCard = () => {
                             Edit service action
                         </CCardHeader>
                         <CCardBody>
-                            <CForm onSubmit={handleSubmit(onHandlerSubmit)}>
+                            <CForm onSubmit={onHandlerSubmit}>
                                 <br />
                                 {
                                     error &&
@@ -165,7 +168,8 @@ const EditServiceActionCard = () => {
                                         <CFormGroup>
                                             <CLabel htmlFor="category">Title</CLabel>
                                             <CInputGroup className="mb-3">
-                                                <Controller
+                                                <CInput value={title} required placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
+                                                {/* <Controller
                                                     name="title"
                                                     control={control}
                                                     defaultValue={''}
@@ -176,9 +180,9 @@ const EditServiceActionCard = () => {
                                                         },
                                                     }}
                                                     render={({ field }) => <CInput {...field} type="text" placeholder="Category" autoComplete="category" />}
-                                                />
+                                                /> */}
                                             </CInputGroup>
-                                            <CFormText className="help-block text-danger" color="red">{errors.title && errors.title.message}</CFormText>
+                                            {/* <CFormText className="help-block text-danger" color="red">{errors.title && errors.title.message}</CFormText> */}
                                         </CFormGroup>
                                     </CCol>
                                     <CCol xs="5">
@@ -187,12 +191,12 @@ const EditServiceActionCard = () => {
                                             <CLabel htmlFor="categoryImage" variant="custom-file">
                                                 Choose image...
                                             </CLabel>
-                                            <CInputFile onChange={categoryOnChange} custom id="categoryImage" type="file" />
+                                            <CInputFile onChange={imageOnChange} custom id="categoryImage" type="file" />
                                         </CInputGroup>
                                     </CCol>
                                     <CCol xs="1">
                                         {/* <img src={`${window.location.origin}/images/category/${categoryState.image}`} className="img-fluid" alt="" /> */}
-                                        <img src={`${window.location.origin}/${categoryState.image}`} className="img-fluid" alt="" />
+                                        <img src={`${process.env.REACT_APP_BASE_URL}/${image}`} className="img-fluid" alt="" />
                                     </CCol>
                                 </CRow>
                                 <CRow>
@@ -209,6 +213,14 @@ const EditServiceActionCard = () => {
                                             <CLabel htmlFor="Button Link">Button Link</CLabel>
                                             <CInputGroup>
                                                 <CInput type="text" onChange={buttonLinkOnChange} value={buttonLink} placeholder="Button Link" autoComplete="Button Link" />
+                                            </CInputGroup>
+                                        </CFormGroup>
+                                    </CCol>
+                                    <CCol xl="6">
+                                        <CFormGroup>
+                                            <CLabel htmlFor="Button Link">Sort Order</CLabel>
+                                            <CInputGroup>
+                                                <CInput type="text" onChange={(e) => setSortOrder(e.target.value)} value={sortOrder} placeholder="Sort order" autoComplete="Button Link" />
                                             </CInputGroup>
                                         </CFormGroup>
                                     </CCol>
@@ -233,7 +245,7 @@ const EditServiceActionCard = () => {
                                         <CFormGroup>
                                             <CInputGroup>
                                                 {/* <CSwitch onChange={switch2} checked={switchState} className={'mx-1'} color={'success'} defaultChecked variant="opposite" /> */}
-                                                <Switch onChange={onChangeIsFeatured} checked={isFeatured} />
+                                                <Switch onChange={() => setIsFeatured(!isFeatured)} checked={isFeatured} />
                                             </CInputGroup>
                                         </CFormGroup>
                                     </CCol>

@@ -100,9 +100,9 @@ const EditAboutCard = () => {
 
         const formData = new FormData();
         const status = isFeatured ? 1 :0;
-        formData.append('shortOrder', shortOrder);
+        formData.append('sortOrder', shortOrder);
         formData.append('title', title);
-        formData.append('description', description);
+        formData.append('tagLine', description);
         formData.append('buttonText', bannerButtonText);
         formData.append('link', link);
         formData.append('status', status);

@@ -113,6 +113,7 @@ const EditFaq = () => {
         formData.append('question', e.question);
         formData.append('categoryId', e.categoryId);
         formData.append('answer', e.answer);
+        formData.append('addToHome', JSON.stringify(2));
 
         setError(null);
         setLoading(true);

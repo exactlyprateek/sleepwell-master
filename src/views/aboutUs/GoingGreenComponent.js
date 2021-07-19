@@ -14,7 +14,7 @@ import {
 	CCard,
 	CRow,
 	CFormText,
-    CTextarea
+	CTextarea
 } from '@coreui/react';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -34,20 +34,20 @@ const AddGoingGreenComponent = () => {
 	const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'all', resolver: yupResolver(schema) });
 
 	let history = useHistory();
-	const [ error, setError ] = useState(null);
-	const [ loading, setLoading ] = useState(false);
-	const [ isActive, setIsActive ] = useState(true);
-    const [id, setId] = useState(null);
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [isActive, setIsActive] = useState(true);
+	const [id, setId] = useState(null);
 	// const [sectionFourBannerTitle, setSectionFourBannerTitle] = useState('');
-	const [ sectionBannerImage, setSectionBannerImage ] = useState('');
-	const [ description, setDescription ] = useState('');
-	const [ bannerDescription, setBannerDescription ] = useState('');
-	const [ title, setTitle ] = useState('');
+	const [sectionBannerImage, setSectionBannerImage] = useState('');
+	const [bannerDescription, setBannerDescription] = useState('');
+	const [description, setDescription] = useState('');
+	const [title, setTitle] = useState('');
 	const jwtToken = sessionStorage.getItem('token');
-	const [ bannerTitle, setBannerTitle ] = useState('');
-
+	const [bannerTitle, setBannerTitle] = useState('');
+	const [save, setSave] = useState(false);
 	const handleSectionDescription = (e) => {
-		setBannerDescription(e.target.value);
+		setSectionBannerImage(e.target.value);
 	};
 	const handleDescription = (e) => {
 		setDescription(e.target.value);
@@ -72,14 +72,15 @@ const AddGoingGreenComponent = () => {
 				}
 			})
 			.then((response) => {
-				console.log(response.data.goingGreen);
+				// console.log(response.data.goingGreen);
 				setTitle(response.data.goingGreen.title);
 				setBannerTitle(response.data.goingGreen.bannerTitle);
-				setBannerDescription(response.data.goingGreen.bannerDescription);
+				setSectionBannerImage(response.data.goingGreen.bannerDescription);
 				setDescription(response.data.goingGreen.description);
 				setIsActive(response.data.goingGreen.status);
-                setId(response.data.goingGreen.id)
+				setId(response.data.goingGreen.id)
 				setSectionBannerImage(response.data.goingGreen.image);
+				setBannerDescription(response.data.goingGreen.bannerDescription);
 				// setSectionFourBannerTitle(response.data.goingGreen.)
 			})
 			.catch((err) => {
@@ -88,19 +89,20 @@ const AddGoingGreenComponent = () => {
 			.finally(() => setLoading(false));
 	};
 	const onHandlerSubmit = (e) => {
-        e.preventDefault();
+		e.preventDefault();
 		setError(null);
 		setLoading(true);
 
 		const formData = new FormData();
 		let status = isActive ? 1 : 0;
 		formData.append('status', status);
-		formData.append('description', bannerDescription);
-		formData.append('title', e.sectionTitle);
+		formData.append('description', description);
+		formData.append('title', title);
+		formData.append('bannerTitle', bannerTitle);
 		formData.append('id', id);
 		// formData.append('bannerTitle', sectionFourBannerTitle);
 		formData.append('image', sectionBannerImage);
-		formData.append('bannerDescription', description);
+		formData.append('bannerDescription', bannerDescription);
 
 		axios
 			.post('http://markbran.in/apis/admin/goingGreen', formData, {
@@ -112,7 +114,7 @@ const AddGoingGreenComponent = () => {
 			.then((response) => {
 				setLoading(false);
 				// history.push('/about-us');
-				console.log(response);
+				setSave(true);
 			})
 			.catch((err) => {
 				setLoading(false);
@@ -132,19 +134,22 @@ const AddGoingGreenComponent = () => {
 						<CCardHeader>Going green</CCardHeader>
 						<CCardBody>
 							<CForm encType="multipart/form-data" >
-							{/* <CForm encType="multipart/form-data" onSubmit={handleSubmit(onHandlerSubmit)}> */}
+								{/* <CForm encType="multipart/form-data" onSubmit={handleSubmit(onHandlerSubmit)}> */}
 								{error && <p className="text-danger">{error}</p>}
+								{save && (
+										<p className="alert alert-success">Saved Successfully</p>
+									)}
 								<CRow>
 									<CCol xl="6">
 										<CFormGroup>
-											<CLabel htmlFor="shortItem">Section title</CLabel>
+											<CLabel htmlFor="shortItem">Banner title</CLabel>
 											<CInputGroup className="mb-3">
 												{/* <CInput type="text" onChange={goingGreenSectionTitleOnChange} value={goingGreenSectionTitle} placeholder="Title" autoComplete="title" /> */}
 												<CInput
-													value={title}
-													onChange={(e) => setTitle(e.target.value)}
+													value={bannerTitle}
+													onChange={(e) => setBannerTitle(e.target.value)}
 													type="text"
-													{...register('sectionTitle')}
+													// {...register('sectionTitle')}
 													placeholder="Title"
 													autoComplete="title"
 												/>
@@ -158,39 +163,61 @@ const AddGoingGreenComponent = () => {
 								<CRow>
 									<CCol xl="12">
 										<CFormGroup>
-											<CLabel htmlFor="shortItem">Section description</CLabel>
+											<CLabel htmlFor="shortItem">Banner description</CLabel>
 											{/* <CkEditor
 												data={bannerDescription}
 												onEditorValue={handleSectionDescription}
 											/> */}
 
 											<CInputGroup className="mb-3">
-                                                <CTextarea
-                                                
-                                                    id="content"
-                                                    rows="3"
-                                                    onChange={handleSectionDescription} value={bannerDescription}
-                                                ></CTextarea>
-                                            </CInputGroup>
+												<CTextarea
+													id="content"
+													rows="3"
+													onChange={e => setBannerDescription(e.target.value)} 
+													value={bannerDescription}
+												></CTextarea>
+											</CInputGroup>
 										</CFormGroup>
 									</CCol>
 								</CRow>
 								<CRow>
 									<CCol xl="6">
 										<CFormGroup>
-											<CLabel htmlFor="shortItem">Banner Title</CLabel>
+											<CLabel htmlFor="shortItem">Title</CLabel>
 											<CInputGroup className="mb-3">
 												{/* <CInput type="text" onChange={goingGreenSectionTitleOnChange} value={goingGreenSectionTitle} placeholder="Title" autoComplete="title" /> */}
 												<CInput
-													value={bannerTitle}
-													onChange={(e) => setBannerTitle(e.target.value)}
+													value={title}
+													onChange={(e) => setTitle(e.target.value)}
 													type="text"
-													{...register('bannerTitle')}
+													// {...register('bannerTitle')}
 													placeholder="Banner Title"
 													autoComplete="banner title"
 												/>
 											</CInputGroup>
 											{/* <CFormText className="help-block text-danger" color="red">{errors.size && errors.size.message}</CFormText> */}
+										</CFormGroup>
+									</CCol>
+								</CRow>
+								<CRow>
+									<CCol xl="12">
+										<CFormGroup>
+											<CLabel htmlFor="shortItem">Description</CLabel>
+											{/* <CkEditor onEditorValue={handleDescription} /> */}
+											<CInputGroup className="mb-3">
+												<CTextarea
+													id="content"
+													rows="3"
+													onChange={e => setDescription(e.target.value)} value={description}
+												></CTextarea>
+											</CInputGroup>
+											{/* <CInputGroup className="mb-3">
+                                                <CTextarea
+                                                    id="content"
+                                                    rows="3"
+                                                    onChange={sectionFourDescriptionOnChange} value={sectionFourDescription}
+                                                ></CTextarea>
+                                            </CInputGroup> */}
 										</CFormGroup>
 									</CCol>
 								</CRow>
@@ -219,34 +246,12 @@ const AddGoingGreenComponent = () => {
 									</CCol>
 								</CRow>
 								<CRow>
-									<CCol xl="12">
-										<CFormGroup>
-											<CLabel htmlFor="shortItem">Description</CLabel>
-											{/* <CkEditor onEditorValue={handleDescription} /> */}
-                                            <CInputGroup className="mb-3">
-                                                <CTextarea
-                                                    id="content"
-                                                    rows="3"
-                                                    onChange={handleDescription} value={description}
-                                                ></CTextarea>
-                                            </CInputGroup>
-											{/* <CInputGroup className="mb-3">
-                                                <CTextarea
-                                                    id="content"
-                                                    rows="3"
-                                                    onChange={sectionFourDescriptionOnChange} value={sectionFourDescription}
-                                                ></CTextarea>
-                                            </CInputGroup> */}
-										</CFormGroup>
-									</CCol>
-								</CRow>
-								<CRow>
 									<CCol xl="6">
 										<CFormGroup>
 											<CLabel htmlFor="is_active">Status</CLabel>
 											<CInputGroup>
 												{/* <CSwitch onChange={switch2} checked={switchState} className={'mx-1'} color={'success'} defaultChecked variant="opposite" /> */}
-												<Switch onChange={onChangeIsActive} checked={isActive} />
+												<Switch onChange={() => setIsActive(!isActive)} checked={isActive} />
 											</CInputGroup>
 										</CFormGroup>
 									</CCol>
@@ -254,7 +259,7 @@ const AddGoingGreenComponent = () => {
 								<CRow>
 									<CCol xs="8">
 										<button
-                                        onClick={onHandlerSubmit}
+											onClick={onHandlerSubmit}
 											className="btn btn-success"
 											disabled={loading ? true : false}
 											type="submit"
@@ -262,6 +267,7 @@ const AddGoingGreenComponent = () => {
 											{loading ? 'Loading...' : 'Save going green'}
 										</button>
 									</CCol>
+									
 								</CRow>
 							</CForm>
 						</CCardBody>
