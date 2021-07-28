@@ -142,6 +142,7 @@ const Material = React.lazy(() => import('./views/material/Material'));
 const AddMaterial = React.lazy(() => import('./views/material/AddMaterial'));
 const EditMaterial = React.lazy(() => import('./views/material/EditMaterial'));
 const WhatGoesInside = React.lazy(() => import('./views/whatGoesInside/WhatGoesInside'));
+const EditWhatGoesInsideCard = React.lazy(() => import('./views/whatGoesInside/EditWhatGoesInsideCard'));
 const AddWhatGoesInside = React.lazy(() => import('./views/whatGoesInside/AddWhatGoesInside'));
 const OfferBanner = React.lazy(() => import('./views/offerBanner/OfferBanner'));
 const AddOfferBanner = React.lazy(() => import('./views/offerBanner/AddOfferBanner'));
@@ -160,6 +161,10 @@ const EditServiceCard = React.lazy(() => import('./views/serviceCard/EditService
 const ServicesAtHome = React.lazy(() => import('./views/serviceAtHome/ServicesAtHome'));
 const ServiceSubPage = React.lazy(() => import('./views/serviceSubPages/ServiceSubPage'));
 const AddServiceSubPage = React.lazy(() => import('./views/serviceSubPages/AddServiceSubPage'));
+const HeaderTabs = React.lazy(() => import('./views/headerTabs/HeaderTabs'));
+const EditHeaderTab = React.lazy(() => import('./views/headerTabs/EditHeaderTab'));
+const AddHeaderTab = React.lazy(() => import('./views/headerTabs/AddHeaderTab'));
+const Orders = React.lazy(() => import('./views/orders/Orders'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -207,13 +212,13 @@ const routes = [
   { path: '/products', exact: true, name: 'Products', component: Products },
   { path: '/add-product', exact: true, name: 'Add Products', component: AddProduct },
   { path: '/edit-product/:id', exact: true, name: 'Edit Products', component: EditProduct },
-  { path: '/category-management', exact: true, name: 'Category Management' },
+  // { path: '/category-management', exact: true, name: 'Category Management' },
   { path: '/categories', exact: true, name: 'Category', component: Categories },
-  { path: '/add-category', exact: true, name: 'Add Category', component: AddCategory },
-  { path: '/category-management/edit-category/:id', name: 'Edit Category', component: EditCategory },
+  { path: '/categories/add-category', exact: true, name: 'Add Category', component: AddCategory },
+  { path: '/categories/edit-category/:id', name: 'Edit Category', component: EditCategory },
   { path: '/sub-categories', exact: true, name: 'Sub Category', component: SubCategory },
-  { path: '/add-sub-categories', exact: true, name: 'Add Sub Category', component: AddSubCategory },
-  { path: '/edit-sub-categories/:id', exact: true, name: 'Edit Sub Category', component: EditSubCategory },
+  { path: '/sub-categories/add-sub-categories', exact: true, name: 'Add Sub Category', component: AddSubCategory },
+  { path: '/sub-categories/edit-sub-categories/:id', exact: true, name: 'Edit Sub Category', component: EditSubCategory },
   // { path: '/category-management/sub-sub-categories', exact: true, name: 'Third Level Category', component: SubSubCategory },
   // { path: '/category-management/add-third-level-categories', exact: true, name: 'Add Third Level Category', component: AddSubSubCategory },
   // { path: '/category-management/sizes', name: 'Sizes', component: Sizes, exact: true },
@@ -315,7 +320,7 @@ const routes = [
   { path: '/material/add', name: 'Add Material', component: AddMaterial, exact: true },
   { path: '/material/edit/:id', name: 'Edit Material', component: EditMaterial, exact: true },
   { path: '/what-goes-inside', name: 'What Goes Inside', component: WhatGoesInside, exact: true },
-  { path: '/what-goes-inside/add', name: 'Add What Goes Inside', component: AddWhatGoesInside, exact: true },
+  { path: '/what-goes-inside/card/:id', name: 'Edit What Goes Inside', component: EditWhatGoesInsideCard, exact: true },
   { path: '/offer-banner', name: 'Offer Banner', component: OfferBanner, exact: true },
   { path: '/offer-banner/add', name: 'Add Offer Banner', component: AddOfferBanner, exact: true },
   { path: '/comfort-home', name: 'Comfort Home', component: ComfortHome, exact: true },
@@ -331,6 +336,10 @@ const routes = [
   { path: '/service-card/add', name: 'Add Service Card', component: AddServiceCard, exact: true },
   { path: '/service-card/edit/:id', name: 'Edit Service Card', component: EditServiceCard, exact: true },
   { path: '/services-at-home', name: 'Services At Home', component: ServicesAtHome, exact: true },
+  { path: '/header-tabs', name: 'Header Tabs', component: HeaderTabs, exact: true },
+  { path: '/header-tabs/edit/:id', name: 'Edit Header Tab', component: EditHeaderTab, exact: true },
+  { path: '/header-tabs/add/', name: 'Add Header Tab', component: AddHeaderTab, exact: true },
+  { path: '/orders/', name: 'All Orders', component: Orders, exact: true },
 
 ];
 

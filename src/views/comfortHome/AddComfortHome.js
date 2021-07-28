@@ -13,6 +13,7 @@ import {
     CInputGroup,
     CLabel,
     CRow,
+    CTextarea,
 } from '@coreui/react'
 import Switch from "react-switch";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -60,7 +61,7 @@ const AddComfortHome = () => {
         setIsFeatured(e);
     }
     const handleDescription = (data) => {
-        setDescription(data);
+        setDescription(data.target.value);
     }
 
 
@@ -172,7 +173,7 @@ const AddComfortHome = () => {
                                     <CCol xl="12">
                                         <CFormGroup>
                                             <CLabel htmlFor="shortItem">Description</CLabel>
-                                            <CkEditor onEditorValue={handleDescription} />
+                                            <CTextarea onChange={handleDescription} value={description} />
                                         </CFormGroup>
                                     </CCol>
                                 </CRow>

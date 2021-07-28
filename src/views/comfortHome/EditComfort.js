@@ -53,7 +53,7 @@ const EditComfort = () => {
     let jwtToken = sessionStorage.getItem("token");
 
     const handleDescription = (data) => {
-        setDescription(data);
+        setDescription(data.target.value);
     }
     const handleShortOrderOnChange = (e) => {
         setShortOrder(e.target.value);
@@ -104,7 +104,7 @@ const EditComfort = () => {
             setValue("sortOrder", comforts.sortOrder)
         }
         setIsFeatured((comforts.status === 1 ? true : false));
-        setEditorData(comforts.description);
+        setDescription(comforts.description);
         setButtonText(comforts.buttonText);
         setButtonLink(comforts.buttonLink);
         setShortOrder(comforts.sortOrder);
@@ -242,7 +242,7 @@ const EditComfort = () => {
                                     <CCol xl="12">
                                         <CFormGroup>
                                             <CLabel htmlFor="shortItem">Description</CLabel>
-                                            <CkEditor onEditorValue={handleDescription} editorValue={editorData} />
+                                            <CTextarea onChange={handleDescription} value={description} />
                                         </CFormGroup>
                                     </CCol>
                                 </CRow>

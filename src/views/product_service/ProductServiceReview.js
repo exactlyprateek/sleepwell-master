@@ -26,10 +26,10 @@ const ProductServiceReview = () => {
 
     const jwtToken = sessionStorage.getItem("token");
 
-    const onChangeIsActive = (id) => {
+    const onChangeIsActive = (id,rstatus) => {
         // console.log(id);
         // setIsActive(!isActive);
-        updateStatus(id);
+        updateStatus(id,rstatus);
     }
 
     // 
@@ -63,11 +63,11 @@ const ProductServiceReview = () => {
             })
     }
     // * update status
-    const updateStatus = (reviewId) => {
+    const updateStatus = (reviewId, rstatus) => {
         const formData = new FormData();
-        let status = isActive ? 1 : 0;
+        let status = JSON.parse(rstatus)?1:0 ;
         console.log(status);
-        formData.append('status', (!isActive ? 1 : 0).toString());
+        formData.append('status', (!status ? 1 : 0));
         axios.post(`http://markbran.in/apis/admin/review/${reviewId}`, formData, {
             headers: {
                 "auth-token": jwtToken //the token is a variable which holds the token
@@ -95,8 +95,8 @@ const ProductServiceReview = () => {
                     setShowAlertDanger(true);
                     setTextMessage("Something went wrong, try again!.");
                 }
-                // axiosReviews();
-                setIsActive(isActive);
+                axiosReviews();
+                // setIsActive(isActive);
             });
     }
     const axiosReviews = () => {
@@ -108,6 +108,7 @@ const ProductServiceReview = () => {
             .then(function (response) {
                 console.log(response.data.reviews);
                 setReviews(response.data.reviews);
+                // setIsActive(response.data.reviews.status?true:false);
                 setShowAlertSuccess(false);
                 setShowAlertDanger(false);
             })
@@ -170,7 +171,7 @@ const ProductServiceReview = () => {
                                         <td>{item.productName}</td>
                                         <td>{item.description}</td>
                                         <td>
-                                            <Switch onChange={() => onChangeIsActive(item.id)} checked={isActive} />
+                                            <Switch onChange={() => onChangeIsActive(item.id,item.status)} checked={JSON.parse(item.status)?true:false} />
                                         </td>
                                         <td>{dateFormat(item.createdAt, "mmmm dS, yyyy")}</td>
                                         <td>

@@ -37,6 +37,7 @@ const EditFaq = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [addToHome, setAddToHome] = useState(false);
     const [faqState, setFaqState] = useState([]);
     const [categories, setCategories] = useState([])
 
@@ -71,7 +72,7 @@ const EditFaq = () => {
     }
 
     //* get faq
-    const getCategoryAxios = () => {
+    const getFaq = () => {
         axios.get(`http://markbran.in/apis/admin/faq/${faqId.id}`, {
             headers: {
                 "auth-token": jwtToken //the token is a variable which holds the token
@@ -80,6 +81,7 @@ const EditFaq = () => {
             .then(function (response) {
                 console.log(response.data);
                 setFaqState(response.data.faqs);
+                setAddToHome(response.data.faqs.addToHome?true:false);
                 setError(null);
             })
             .catch(function (err) {
@@ -93,7 +95,7 @@ const EditFaq = () => {
     }
 
     useEffect(() => {
-        getCategoryAxios();
+        getFaq();
         axiosCategories()
 
         // console.log(faqState);
@@ -113,7 +115,7 @@ const EditFaq = () => {
         formData.append('question', e.question);
         formData.append('categoryId', e.categoryId);
         formData.append('answer', e.answer);
-        formData.append('addToHome', JSON.stringify(2));
+        formData.append('addToHome', addToHome?1:0);
 
         setError(null);
         setLoading(true);
@@ -125,7 +127,7 @@ const EditFaq = () => {
         })
             .then(response => {
                 setLoading(false);
-                history.push('/faq-categories')
+                history.push('/faq')
                 // console.log(response);
                 setError(null);
             })
@@ -234,6 +236,17 @@ const EditFaq = () => {
                                             <CInputGroup>
                                                 {/* <CSwitch onChange={switch2} checked={switchState} className={'mx-1'} color={'success'} defaultChecked variant="opposite" /> */}
                                                 <Switch onChange={onChangeIsActive} checked={isActive} />
+                                            </CInputGroup>
+                                        </CFormGroup>
+                                    </CCol>
+                                </CRow>
+                                <CRow>
+                                    <CCol xl="6">
+                                        <CFormGroup>
+                                            <CLabel htmlFor="addtohome">Add to Home</CLabel>
+                                            <CInputGroup>
+                                                {/* <CSwitch onChange={switch2} checked={switchState} className={'mx-1'} color={'success'} defaultChecked variant="opposite" /> */}
+                                                <Switch onChange={() => setAddToHome(!addToHome)} checked={addToHome} />
                                             </CInputGroup>
                                         </CFormGroup>
                                     </CCol>

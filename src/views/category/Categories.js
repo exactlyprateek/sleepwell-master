@@ -85,7 +85,7 @@ const Categories = () => {
                     <CCardHeader>
                         Categories
             
-                        <CLink style={{ float: 'right' }} className="btn btn-success" to="/add-category">
+                        <CLink style={{ float: 'right' }} className="btn btn-success" to="/categories/add-category">
                             Add Category
                         </CLink>
                         {/* <small  className="text-muted"> example</small> */}
@@ -119,7 +119,7 @@ const Categories = () => {
                                         <td>{item.title}</td>
                                         <td>{dateFormat(item.createdAt, "mmmm dS, yyyy")}</td>
                                         <td>
-                                            <CLink className="btn btn-sm btn-outline-warning" to={`/category-management/edit-category/${item.id}`}>
+                                            <CLink className="btn btn-sm btn-outline-warning" to={`/categories/edit-category/${item.id}`}>
                                                 Edit
                                             </CLink>
                                             {/* <button onClick={() => clickOnDelete(item.id)} type="button" className="btn btn-sm btn-outline-danger">Delete</button> */}

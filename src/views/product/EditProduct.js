@@ -35,15 +35,17 @@ const EditProduct = () => {
 	const [ errors, setErrors ] = useState('');
 	const [ alertSuccess, setAlertSuccess ] = useState(false);
 	const [ alertDanger, setAlertDanger ] = useState(false);
-	const [ bannerImage, setBannerImage ] = useState();
+	const [ selectedImages, setSelectedImages ] = useState([]);
 	const [ giftDetail, setGiftDetail ] = useState('');
 	//GET
 	const [ categories, setCategories ] = useState([]);
 	const [ benifits, setBenifits ] = useState([]);
 	const [ product, setProduct ] = useState([]);
 	const [ materials, setMaterials ] = useState([]);
-	const [ states, setStates ] = useState([]);
+	const [ statesArray, setStatesArray ] = useState([]);
 	const [ advantages, setAdvantages ] = useState([]);
+	const [ productAdvantageImage, setProductAdvantageImage ] = useState('');
+	const [ productAdvantageVideo, setProductAdvantageVideo ] = useState('');
 	const [ subCategories, setSubCategories ] = useState([]);
 	const [ subSubCategories, setSubSubCategories ] = useState([]);
 	const [ productImages, setProductImages ] = useState([]);
@@ -55,7 +57,10 @@ const EditProduct = () => {
 	const [ subCategory, setSubCategory ] = useState('');
 	const [ subSubCategory, setSubSubCategory ] = useState('');
 	const [ isActive, setIsActive ] = useState(true);
+
 	//Second Form
+	const [ advantageImage, setAdvantageImage ] = useState('');
+	const [ advantageVideo, setAdvantageVideo ] = useState('');
 	const [ productId, setProductId ] = useState(pId.id);
 	const [ productAdvantages, setProductAdvantages ] = useState([]);
 	const [ productBenifits, setProductBenifits ] = useState([]);
@@ -63,6 +68,11 @@ const EditProduct = () => {
 	const [ productMaterials, setProductMaterials ] = useState([]);
 	// const [ thickness, setThickness ] = useState('');
 	//Third Form
+
+	const [ thumbnailImage, setThumbnailImage ] = useState('');
+	const [ productBanner, setProductBanner ] = useState('');
+	const [ bannerImage, setBannerImage ] = useState('');
+	const [ productThumbnail, setProductThumbnail ] = useState('');
 
 	const [ categoryId, setCategoryId ] = useState('');
 	const [ bestSeller, setBestSeller ] = useState(true);
@@ -157,9 +167,11 @@ const EditProduct = () => {
 			})
 			.then(function(response) {
 				// console.log(response.data.subSubCategories);
-				let advar = response.data.productAdvanatages.map((i) => i.advantageId);
-
+				let advar = response.data.productAdvantages.advantages.map((i) => JSON.parse(i));
+				// console.log(response.data.productAdvantages.advantages)
 				setProductAdvantages(advar);
+				setProductAdvantageImage(response.data.productAdvantages.image);
+				setProductAdvantageVideo(response.data.productAdvantages.video);
 			})
 			.catch(function(error) {
 				// handle error
@@ -195,7 +207,7 @@ const EditProduct = () => {
 			})
 			.then(function(response) {
 				// console.log(response.data.productBenifits.map((i) => i.benifitId));
-				let bnvar = response.data.productBenifits.map((i) => i.benifitId);
+				let bnvar = response.data.productBenifits.map((i) => JSON.parse(i));
 
 				setProductBenifits(bnvar);
 			})
@@ -205,7 +217,7 @@ const EditProduct = () => {
 				console.log(error);
 			});
 	};
-	const getStates = () => {
+	const getStatesArray = () => {
 		axios
 			.get(`http://markbran.in/apis/admin/state/`, {
 				headers: {
@@ -214,7 +226,7 @@ const EditProduct = () => {
 			})
 			.then(function(response) {
 				// console.log(response.data.subSubCategories);
-				setStates(response.data.states);
+				setStatesArray(response.data.states);
 			})
 			.catch(function(error) {
 				// handle error
@@ -279,12 +291,15 @@ const EditProduct = () => {
 				setTitle(response.data.productDetails.title);
 				setDescription(response.data.productDetails.description);
 				setDiscount(response.data.productDetails.discount);
+				// setProductStates(response.data.productDetails.states);
+				setProductThumbnail(response.data.productDetails.thumbnail);
+				setProductBanner(response.data.productDetails.banner);
 				// setProductId(response.data.productId);
 				// setCategories(response.data.categories);
 			})
 			.catch(function(error) {
 				// handle error
-				setErrors(error.toLocaleString());
+				setErrors(error.message ? error.message : error.toLocaleString());
 				console.log(error);
 			});
 	};
@@ -294,12 +309,14 @@ const EditProduct = () => {
 		formData.append('scid', subCategory);
 		formData.append('sscid', subSubCategory);
 		formData.append('title', title);
+		formData.append('banner', bannerImage ? bannerImage : productBanner);
+		formData.append('thumbnail', thumbnailImage ? thumbnailImage : productThumbnail);
 		formData.append('discount', discount);
 		formData.append('description', description);
 		formData.append('status', isActive ? 1 : 0);
 
 		axios
-			.post(`http://markbran.in/apis/admin/product/details/${productId}`, formData, {
+			.patch(`http://markbran.in/apis/admin/product/details/${productId}`, formData, {
 				headers: {
 					'auth-token': jwtToken //the token is a variable which holds the token
 				}
@@ -316,7 +333,8 @@ const EditProduct = () => {
 				// handle error
 				setErrors(error.toLocaleString());
 				console.log(error);
-			});
+			})
+			.finally(() => getProduct(productId));
 	};
 	const descriptionOnChange = (e) => {
 		setDescription(e.target.value);
@@ -325,7 +343,8 @@ const EditProduct = () => {
 		setGiftDetail(e.target.value);
 	};
 	const bannerOnChange = (e) => {
-		setBannerImage(e.target.files[0]);
+		setSelectedImages(Array.from(e.target.files));
+		console.log(e.target.files);
 	};
 	const handleAdvantages = (advantages) => {
 		console.log(advantages.map((i) => i.id));
@@ -344,22 +363,43 @@ const EditProduct = () => {
 		setProductMaterials(mtr.map((i) => i.id));
 		// console.log(ar);
 	};
+	const handleVariants = (mtr) => {
+		setProductMaterials(mtr.map((i) => i.id));
+		// console.log(ar);
+	};
 	const handleStates = (states) => {
 		setProductStates(states.map((i) => i.id));
 		// console.log(ar);
 	};
 	const saveStates = () => {
 		let statesData = new FormData();
-		statesData.append('pid', productId);
-		statesData.append('states', productStates);
+		// statesData.append('pid', productId);
+		let states = productStates.map(i => i.toString());
+		statesData.append('stateIds', states);
+		axios
+			.patch(`http://markbran.in/apis/admin/product/states/${productId}`, statesData, {
+				headers: {
+					'auth-token': jwtToken //the token is a variable which holds the token
+				}
+			})
+			.then(function(response) {
+				console.log(response.data);
+				setAlertSuccess('saved');
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
 	};
 	const saveAdvantages = () => {
 		let advantagesData = new FormData();
-		advantagesData.append('pid', productId);
-		advantagesData.append('advantages', productAdvantages);
+		// advantagesData.append('pid', productId);
+		console.log(productAdvantages.map(i => i.toString()));
+		advantagesData.append('advantageIds', productAdvantages.map(i => i.toString()));
+		advantagesData.append('image', advantageImage ? advantageImage : productAdvantageImage);
+		advantagesData.append('video', advantageVideo ? advantageVideo : productAdvantageVideo);
 
 		axios
-			.post('http://markbran.in/apis/admin/product/advantages/', advantagesData, {
+			.patch(`http://markbran.in/apis/admin/product/advantages/${productId}`, advantagesData, {
 				headers: {
 					'auth-token': jwtToken //the token is a variable which holds the token
 				}
@@ -369,21 +409,23 @@ const EditProduct = () => {
 			})
 			.catch(function(error) {
 				console.log(error);
-			});
+			})
+			.finally(() => getProductAdvantages());
 	};
 	const saveMaterials = () => {
 		let materialData = new FormData();
-		materialData.append('pid', productId);
-		materialData.append('materials', productMaterials);
+		// materialData.append('pid', productId);
+		materialData.append('materialIds', productMaterials);
 
 		axios
-			.post('http://markbran.in/apis/admin/product/materials/', materialData, {
+			.patch(`http://markbran.in/apis/admin/product/materials/${productId}`, materialData, {
 				headers: {
 					'auth-token': jwtToken //the token is a variable which holds the token
 				}
 			})
 			.then(function(response) {
 				console.log(response.data);
+				getMaterials();
 			})
 			.catch(function(error) {
 				console.log(error);
@@ -391,17 +433,39 @@ const EditProduct = () => {
 	};
 	const saveBenifits = () => {
 		let benifitsData = new FormData();
-		benifitsData.append('pid', productId);
-		benifitsData.append('benifits', productBenifits);
+		// benifitsData.append('pid', productId);
+		benifitsData.append('benifitIds', productBenifits);
 
 		axios
-			.post('http://markbran.in/apis/admin/product/benifits/', benifitsData, {
+			.patch(`http://markbran.in/apis/admin/product/benifits/${productId}`, benifitsData, {
 				headers: {
 					'auth-token': jwtToken //the token is a variable which holds the token
 				}
 			})
 			.then(function(response) {
 				console.log(response.data);
+			})
+			.catch(function(error) {
+				console.log(error);
+			})
+			.finally(() => getProductBenefits());
+	};
+	const saveImages = () => {
+		let formData = new FormData();
+		// formData.append('pid', productId);
+		for (let i = 0; i < selectedImages.length; i++) {
+			formData.append('images', selectedImages[i]);
+		}
+
+		axios
+			.patch(`http://markbran.in/apis/admin/product/images/${productId}`, formData, {
+				headers: {
+					'auth-token': jwtToken //the token is a variable which holds the token
+				}
+			})
+			.then(function(response) {
+				console.log(response.data);
+				setAlertSuccess('saved');
 			})
 			.catch(function(error) {
 				console.log(error);
@@ -412,6 +476,14 @@ const EditProduct = () => {
 		saveAdvantages();
 		saveMaterials();
 		saveBenifits();
+		saveImages();
+	};
+	const saveBenifitMaterialStates = () => {
+		saveStates();
+		// saveAdvantages();
+		saveMaterials();
+		saveBenifits();
+		// saveImages();
 	};
 	useEffect(
 		() => {
@@ -421,7 +493,7 @@ const EditProduct = () => {
 			getProduct(productId);
 			getAdvantages();
 			getBenefits();
-			getStates();
+			getStatesArray();
 			getMaterials();
 			getProductAdvantages();
 			getProductBenefits();
@@ -508,7 +580,23 @@ const EditProduct = () => {
 									onClick={() => setPage(2)}
 									className={`nav-link active btn btn-${page === 2 ? `primary` : `secondary`} mx-2`}
 								>
-									Edit more details
+									Advantages
+								</button>
+							</li>
+							<li className="nav-item">
+								<button
+									onClick={() => setPage(3)}
+									className={`nav-link active btn btn-${page === 3 ? `primary` : `secondary`} mx-2`}
+								>
+									Images
+								</button>
+							</li>
+							<li className="nav-item">
+								<button
+									onClick={() => setPage(4)}
+									className={`nav-link active btn btn-${page === 4 ? `primary` : `secondary`} mx-2`}
+								>
+									Benifits, Materials and States
 								</button>
 							</li>
 							{/* <li className="nav-item">
@@ -526,9 +614,9 @@ const EditProduct = () => {
 						{page === 1 && (
 							<React.Fragment>
 								<CRow>
-									<CFormText className="help-block text-danger" color="red">
+									{/* <CFormText className="help-block text-danger" color="red">
 										{errors}
-									</CFormText>
+									</CFormText> */}
 								</CRow>
 								<CRow className="mt-4">
 									<CCol xs="6">
@@ -594,7 +682,7 @@ const EditProduct = () => {
 											</CInputGroup>
 										</CFormGroup>
 									</CCol>
-									<CCol xs="6">
+									{/* <CCol xs="6">
 										<CFormGroup>
 											<CLabel htmlFor="name">Discount</CLabel>
 											<CInput
@@ -604,6 +692,81 @@ const EditProduct = () => {
 												value={discount}
 											/>
 										</CFormGroup>
+									</CCol> */}
+
+									<CCol xs="6">
+										<CLabel>Product Banner</CLabel>
+										<div className="my-2" style={{ display: 'flex' }}>
+											{productBanner && (
+												<span>
+													<img
+														src={`${process.env.REACT_APP_BASE_URL}/${productBanner}`}
+														className="img-fluid p-1"
+														width="120px"
+														alt=""
+													/>
+												</span>
+											)}
+										</div>
+										<CInputGroup className="mb-3">
+											<CLabel htmlFor="bannerImage" variant="custom-file">
+												Choose Banner image...
+											</CLabel>
+											<CInputFile
+												multiple
+												onChange={(e) => setBannerImage(e.target.files[0])}
+												custom
+												id="bannerImage"
+												type="file"
+											/>
+											<div style={{ display: 'flex' }}>
+												{bannerImage && (
+													<img
+														src={URL.createObjectURL(bannerImage)}
+														className="img-fluid p-1"
+														width="120px"
+														alt=""
+													/>
+												)}
+											</div>
+										</CInputGroup>
+									</CCol>
+									<CCol xs="6">
+										<CLabel>Product Thumbnail</CLabel>
+										<div className="my-2" style={{ display: 'flex' }}>
+											{productThumbnail && (
+												<span>
+													<img
+														src={`${process.env.REACT_APP_BASE_URL}/${productThumbnail}`}
+														className="img-fluid p-1"
+														width="120px"
+														alt=""
+													/>
+												</span>
+											)}
+										</div>
+										<CInputGroup className="mb-3">
+											<CLabel htmlFor="bannerImage" variant="custom-file">
+												Choose Thumbnail image...
+											</CLabel>
+											<CInputFile
+												multiple
+												onChange={(e) => setThumbnailImage(e.target.files[0])}
+												custom
+												id="bannerImage"
+												type="file"
+											/>
+											<div style={{ display: 'flex' }}>
+												{thumbnailImage && (
+													<img
+														src={URL.createObjectURL(thumbnailImage)}
+														className="img-fluid p-1"
+														width="120px"
+														alt=""
+													/>
+												)}
+											</div>
+										</CInputGroup>
 									</CCol>
 									<CCol xl="6">
 										<CFormGroup>
@@ -625,6 +788,81 @@ const EditProduct = () => {
 						{page === 2 && (
 							<CRow className="mt-4">
 								<CCol xs="6">
+									<div className="my-2" style={{ display: 'flex' }}>
+										{productAdvantageImage && (
+											<span>
+												<CLabel>Current Image</CLabel>
+												<img
+													src={`${process.env.REACT_APP_BASE_URL}/${productAdvantageImage}`}
+													className="img-fluid p-1"
+													width="120px"
+													alt=""
+												/>
+											</span>
+										)}
+									</div>
+									<CInputGroup className="mb-3">
+										<CLabel htmlFor="bannerImage" variant="custom-file">
+											Choose image...
+										</CLabel>
+										<CInputFile
+											onChange={(e) => setAdvantageImage(e.target.files[0])}
+											custom
+											id="bannerImage"
+											type="file"
+										/>
+										<div style={{ display: 'flex' }}>
+											{advantageImage && (
+												<img
+													src={URL.createObjectURL(advantageImage)}
+													className="img-fluid p-1"
+													width="120px"
+													alt=""
+												/>
+											)}
+										</div>
+									</CInputGroup>
+								</CCol>
+								<CCol xs="6">
+									<CLabel>Current Video</CLabel>
+									<div className="my-2" style={{ display: 'flex' }}>
+										{productAdvantageVideo && (
+											<span>
+												<video
+													controls="true"
+													src={`${process.env.REACT_APP_BASE_URL}/${productAdvantageVideo}`}
+													className="img-fluid p-1"
+													width="120px"
+													alt=""
+												/>
+											</span>
+										)}
+									</div>
+									<CInputGroup className="mb-3">
+										<CLabel htmlFor="bannerImage" variant="custom-file">
+											Choose Video...
+										</CLabel>
+										<CInputFile
+											onChange={(e) => setAdvantageVideo(e.target.files[0])}
+											custom
+											id="bannerImage"
+											type="file"
+										/>
+										<div style={{ display: 'flex' }}>
+											{advantageVideo && (
+												<video
+													controls="true"
+													autoPlay="true"
+													src={URL.createObjectURL(advantageVideo)}
+													className="img-fluid p-1"
+													width="120px"
+													alt=""
+												/>
+											)}
+										</div>
+									</CInputGroup>
+								</CCol>
+								<CCol xs="6">
 									<CFormGroup>
 										<CLabel htmlFor="ccyear">Select Advantages</CLabel>
 										{/* //Multiselect */}
@@ -644,6 +882,65 @@ const EditProduct = () => {
 										</CInputGroup>
 									</CFormGroup>
 								</CCol>
+								<CCol xs="8">
+									<button onClick={saveAdvantages} className="btn btn-success" type="button">
+										Save Advantage Data
+									</button>
+								</CCol>
+							</CRow>
+						)}
+						{page === 3 && (
+							<CRow className="mt-4">
+								<CCol xs="6">
+									<CLabel>Current Images</CLabel>
+									<div className="my-2" style={{ display: 'flex' }}>
+										{productImages &&
+											productImages.map((item, idx) => (
+												<span>
+													<img
+														key={idx}
+														src={`${process.env.REACT_APP_BASE_URL}/${item.image}`}
+														className="img-fluid p-1"
+														width="120px"
+														alt=""
+													/>
+												</span>
+											))}
+									</div>
+									<CInputGroup className="mb-3">
+										<CLabel htmlFor="bannerImage" variant="custom-file">
+											Choose image...
+										</CLabel>
+										<CInputFile
+											multiple
+											onChange={bannerOnChange}
+											custom
+											id="bannerImage"
+											type="file"
+										/>
+										<div style={{ display: 'flex' }}>
+											{selectedImages &&
+												selectedImages.map((item) => (
+													<img
+														src={URL.createObjectURL(item)}
+														className="img-fluid p-1"
+														width="120px"
+														alt=""
+													/>
+												))}
+										</div>
+									</CInputGroup>
+								</CCol>
+
+								<CCol xs="8">
+									<button onClick={saveImages} className="btn btn-success" type="button">
+										Save Images
+									</button>
+								</CCol>
+							</CRow>
+						)}
+						{page === 4 && (
+							<CRow className="pt-4">
 								<CCol xs="6">
 									<CFormGroup>
 										<CLabel htmlFor="ccyear">Select Benifits</CLabel>
@@ -663,6 +960,9 @@ const EditProduct = () => {
 											)}
 										</CInputGroup>
 									</CFormGroup>
+									{/* <button onClick={saveBenifits} className="btn btn-success" type="button">
+										Save States
+									</button> */}
 								</CCol>
 								<CCol xs="6">
 									<CFormGroup>
@@ -689,10 +989,12 @@ const EditProduct = () => {
 										<CLabel htmlFor="ccyear">Select States</CLabel>
 										{/* //Multiselect */}
 										<CInputGroup className="mb-3">
-											{states ? (
+											{statesArray ? (
 												<Multiselect
-													options={states} // Options to display in the dropdown
-													selectedValues={states.filter((i) => productStates.includes(i.id))} // Preselected value to persist in dropdown
+													options={statesArray} // Options to display in the dropdown
+													selectedValues={statesArray.filter((i) =>
+														productStates.includes(i.id)
+													)} // Preselected value to persist in dropdown
 													onSelect={(e) => handleStates(e)} // Function will trigger on select event
 													displayValue="state" // Property name to display in the dropdown options
 												/>
@@ -702,82 +1004,18 @@ const EditProduct = () => {
 										</CInputGroup>
 									</CFormGroup>
 								</CCol>
-								{/* <CCol xs="6">
-										<CFormGroup>
-											<CLabel htmlFor="ccmonth">Select Size</CLabel>
-											<CSelect custom name="ccmonth" id="ccmonth">
-												<option value="1">Size 1</option>
-												<option value="2">Size 2</option>
-											</CSelect>
-										</CFormGroup>
-									</CCol> */}
-								<CCol xs="6">
-									<CLabel htmlFor="category">Image</CLabel>
-									<CInputGroup className="mb-3">
-										<CLabel htmlFor="bannerImage" variant="custom-file">
-											Choose image...
-										</CLabel>
-										<CInputFile onChange={bannerOnChange} custom id="bannerImage" type="file" />
-									</CInputGroup>
-								</CCol>
-								{/* <CCol xs="6">
-										<CFormGroup>
-											<CLabel htmlFor="ccyear">Enter Thickness</CLabel>
-											<CInput placeholder="Thickness" value={thickness} onChange={(e) => setThickness(e.target.value)} />
-										</CFormGroup>
-									</CCol> */}
-								<CCol xs="8">
-									<button onClick={saveMoreDetails} className="btn btn-success" type="button">
-										Save Details
+
+								<CCol xs="8" className="mt-4">
+									<button
+										onClick={saveBenifitMaterialStates}
+										className="btn btn-success"
+										type="button"
+									>
+										Save Benefits, Material and States
 									</button>
 								</CCol>
 							</CRow>
 						)}
-						{/* {page === 3 && (
-								<CRow className="mt-4">
-									<CCol xs="6">
-										<CFormGroup>
-											<CLabel htmlFor="name">Design</CLabel>
-											<CInput id="name" placeholder="Enter Design" required />
-										</CFormGroup>
-									</CCol>
-									<CCol xs="6">
-										<CFormGroup>
-											<CLabel htmlFor="name">Colour</CLabel>
-											<CInput id="name" placeholder="Enter Colour" required />
-										</CFormGroup>
-									</CCol>
-
-									<CCol xl="12">
-										<CFormGroup>
-											<CLabel htmlFor="category">Gift Details</CLabel>
-											<CInputGroup>
-												<CTextarea
-													// component="textarea"
-													id="content"
-													rows="3"
-													onChange={giftDetailOnChange}
-													value={giftDetail}
-												/>
-											</CInputGroup>
-										</CFormGroup>
-									</CCol>
-
-									<CCol xl="6">
-										<CFormGroup>
-											<CLabel htmlFor="is_active">Best seller</CLabel>
-											<CInputGroup>
-												<Switch onChange={onChangeBestSeller} checked={bestSeller} />
-											</CInputGroup>
-										</CFormGroup>
-									</CCol>
-									<CCol xs="8">
-										<button className="btn btn-success" type="button">
-											Save and Submit
-										</button>
-									</CCol>
-								</CRow>
-							)} */}
 						<CForm>
 							<CRow />
 						</CForm>

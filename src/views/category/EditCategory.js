@@ -27,6 +27,7 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router';
 import Switch from "react-switch";
+import ReactSwitch from 'react-switch';
 const axios = require('axios').default;
 
 
@@ -43,6 +44,7 @@ const EditCategory = () => {
     const [category, setCategory] = useState('');
     const [categoryImage, setCategoryImage] = useState('');
     const [description, setDescription] = useState('');
+    const [isService, setIsService] = useState(false)
 
     //* description
     const descriptionOnChange = (e) => {
@@ -90,16 +92,17 @@ const EditCategory = () => {
         if(categoryState) {
             setValue("category", categoryState.title)
         }
-        setIsFeatured(categoryState.status);
+        setIsFeatured(categoryState.status?true:false);
+        setIsService(categoryState.isService?true:false);
         setDescription(categoryState.description);
 
     }, [categoryState.title, categoryState.status, categoryState.description]);
 
     const onHandlerSubmit = (e) => {
         const formData = new FormData();
-        formData.append('status', isFeatured);
+        formData.append('status', isFeatured?1:0);
         formData.append('title', e.category);
-        formData.append('image', categoryImage);
+        formData.append('isService', isService?1:0);
         formData.append('description', description);
         // console.log('value', value.categoryName);
         setError(null);
@@ -169,18 +172,27 @@ const EditCategory = () => {
                                             <CFormText className="help-block text-danger" color="red">{errors.category && errors.category.message}</CFormText>
                                         </CFormGroup>
                                     </CCol>
+                                 
+									<CCol xl="6">
+										<CFormGroup>
+											<CLabel htmlFor="category">Service Category</CLabel>
+											<CInputGroup>
+												<Switch onChange={() => setIsService(!isService)} checked={isService} />
+											</CInputGroup>
+										</CFormGroup>
+									</CCol>
+							
                                     <CCol xs="5">
-                                        <CLabel htmlFor="category">Category Image</CLabel>
-                                        <CInputGroup className="mb-3">
-                                            <CLabel htmlFor="categoryImage" variant="custom-file">
-                                                Choose image...
-                                            </CLabel>
-                                            <CInputFile onChange={categoryOnChange} custom id="categoryImage" type="file" />
-                                        </CInputGroup>
+                                        <CLabel htmlFor="category">Status</CLabel>
+                                        <div>
+
+                                       <Switch checked={isFeatured} onChange={() => setIsFeatured(!isFeatured)} />
+                                        </div>
+                                       
                                     </CCol>
                                     <CCol xs="1">
                                         {/* <img src={`${window.location.origin}/images/category/${categoryState.image}`} className="img-fluid" alt="" /> */}
-                                        <img src={`${window.location.origin}/${categoryState.image}`} className="img-fluid" alt="" />
+                                        {/* <img src={`${window.location.origin}/${categoryState.image}`} className="img-fluid" alt="" /> */}
                                     </CCol>
                                 </CRow>
                                 <CRow>
@@ -203,7 +215,7 @@ const EditCategory = () => {
                                         <CFormGroup>
                                             <CInputGroup>
                                                 {/* <CSwitch onChange={switch2} checked={switchState} className={'mx-1'} color={'success'} defaultChecked variant="opposite" /> */}
-                                                <Switch onChange={onChangeIsFeatured} checked={isFeatured} />
+                                                {/* <Switch onChange={onChangeIsFeatured} checked={isFeatured} /> */}
                                             </CInputGroup>
                                         </CFormGroup>
                                     </CCol>

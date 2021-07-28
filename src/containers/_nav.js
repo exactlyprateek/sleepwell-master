@@ -661,6 +661,10 @@ const _nav = [
                 _tag: 'CSidebarNavItem',
                 name: 'Services At Home',
                 to: '/services-at-home',
+            },{
+                _tag: 'CSidebarNavItem',
+                name: 'Header Tabs',
+                to: '/header-tabs',
             },
         ],
     },
@@ -680,6 +684,26 @@ const _nav = [
                 name: 'Permissions',
                 to: '/permission',
             },
+
+        ],
+    },
+    {
+        _tag: 'CSidebarNavDropdown',
+        name: 'Orders',
+        // route: '/category-management',
+        icon: <i className="ri-user-settings-fill mr-3 ri-lg"></i>,
+        _children: [
+            {
+                _tag: 'CSidebarNavItem',
+                name: 'Orders List View',
+                to: '/orders',
+            }
+            // ,
+            // {
+            //     _tag: 'CSidebarNavItem',
+            //     name: 'Orders Log',
+            //     to: '/permission',
+            // },
 
         ],
     },

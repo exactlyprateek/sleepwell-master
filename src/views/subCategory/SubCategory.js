@@ -82,7 +82,7 @@ const SubCategories = () => {
                 <CCard>
                     <CCardHeader>
                         Sub Categories
-                            <CLink style={{ float: 'right' }} className="btn btn-success" to="/add-sub-categories">
+                            <CLink style={{ float: 'right' }} className="btn btn-success" to="/sub-categories/add-sub-categories">
                                 Add Sub Category
                             </CLink>
                         {/* <small  className="text-muted"> example</small> */}
@@ -107,6 +107,7 @@ const SubCategories = () => {
                                     <th scope="col">Sub Category</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Create at</th>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -117,8 +118,14 @@ const SubCategories = () => {
                                         <td>{item.title}</td>
                                         <td>{item.categoryTitle}</td>
                                         <td>{dateFormat(item.createdAt, "mmmm dS, yyyy")}</td>
+                                        <td><img
+										src={`${process.env.REACT_APP_BASE_URL}/${item.image}`}
+										className="img-fluid"
+										alt="CurrentImage"
+                                        width="100px"
+									/></td>
                                         <td>
-                                            <CLink className="btn btn-sm btn-outline-warning" to={`/edit-sub-categories/${item.id}`}>
+                                            <CLink className="btn btn-sm btn-outline-warning" to={`/sub-categories/edit-sub-categories/${item.id}`}>
                                                 Edit
                                             </CLink>
                                             <button onClick={() => clickOnDelete(item.id)} type="button" className="btn btn-sm btn-outline-danger">Delete</button>
