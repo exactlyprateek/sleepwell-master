@@ -146,9 +146,20 @@ const EditWhatGoesInsideCard = React.lazy(() => import('./views/whatGoesInside/E
 const AddWhatGoesInside = React.lazy(() => import('./views/whatGoesInside/AddWhatGoesInside'));
 const OfferBanner = React.lazy(() => import('./views/offerBanner/OfferBanner'));
 const AddOfferBanner = React.lazy(() => import('./views/offerBanner/AddOfferBanner'));
+const ComfortZone = React.lazy(() => import('./views/comfortZone/ComfortZone'));
+const MattressZone = React.lazy(() => import('./views/mattressZone/MattressZone'));
+
+const AddMattressZone = React.lazy(() => import('./views/mattressZone/AddMattressZone'));
+const EditMattressZone = React.lazy(() => import('./views/mattressZone/EditMattressZone'));
+const ComfortBanners = React.lazy(() => import('./views/comfortBanner/ComfortBanners'));
+const AddComfortBanner = React.lazy(() => import('./views/comfortBanner/AddComfortBanner'));
+const EditComfortBanner = React.lazy(() => import('./views/comfortBanner/EditComfortBanner'));
 const ComfortHome = React.lazy(() => import('./views/comfortHome/ComfortHome'));
 const AddComfortHome = React.lazy(() => import('./views/comfortHome/AddComfortHome'));
 const EditComfort = React.lazy(() => import('./views/comfortHome/EditComfort'));
+const KidsComfort = React.lazy(() => import('./views/kidsComfort/KidsComfort'));
+const AddKidsComfort = React.lazy(() => import('./views/kidsComfort/AddKidsComfort'));
+const EditKidsComfort = React.lazy(() => import('./views/kidsComfort/EditKidsComfort'));
 const ReturnPolicy = React.lazy(() => import('./views/returnPolicy/ReturnPolicy'));
 const AddReturnPolicy = React.lazy(() => import('./views/returnPolicy/AddReturnPolicy'));
 const EditReturnPolicy = React.lazy(() => import('./views/returnPolicy/EditReturnPolicy'));
@@ -323,16 +334,25 @@ const routes = [
   { path: '/what-goes-inside/card/:id', name: 'Edit What Goes Inside', component: EditWhatGoesInsideCard, exact: true },
   { path: '/offer-banner', name: 'Offer Banner', component: OfferBanner, exact: true },
   { path: '/offer-banner/add', name: 'Add Offer Banner', component: AddOfferBanner, exact: true },
+  { path: '/comfort-zone', name: 'Comfort Zone', component: ComfortZone, exact: true },
+  { path: '/mattress-zone', name: 'Mattress Zone', component: MattressZone, exact: true },
+  { path: '/mattress-zone/add', name: 'Add Mattress Zone', component: AddMattressZone, exact: true },
+  { path: '/mattress-zone/edit/:id', name: 'Edit Mattress Zone', component: EditMattressZone, exact: true },
   { path: '/comfort-home', name: 'Comfort Home', component: ComfortHome, exact: true },
   { path: '/comfort-home/add', name: 'Add Comfort Home', component: AddComfortHome, exact: true },
-  { path: '/comfort-home/edit/:id', name: 'Edit Comfort Home', component: EditComfort, exact: true },
+  { path: '/comfort-home/edit/:id', name: 'Edit Comfort Home', component: EditComfort, exact: true }, 
+ { path: '/kids-comfort', name: 'Kids Comfort', component: KidsComfort, exact: true },
+  { path: '/kids-comfort/add', name: 'Add Kids Comfort', component: AddKidsComfort, exact: true },
+  { path: '/kids-comfort/edit/:id', name: 'Edit Kids Comfort', component: EditKidsComfort, exact: true },   { path: '/comfort-banner', name: 'Comfort Banner', component: ComfortBanners, exact: true },
+  { path: '/comfort-banner/add', name: 'Add Comfort Banner', component: AddComfortBanner, exact: true },
+  { path: '/comfort-banner/edit/:id', name: 'Edit Comfort Banner', component: EditComfortBanner, exact: true },
   { path: '/return-policy', name: 'Return policy', component: ReturnPolicy, exact: true },
   { path: '/return-policy/add', name: 'Add Return policy', component: AddReturnPolicy, exact: true },
   { path: '/return-policy/edit/:id', name: 'Edit Return policy', component: EditReturnPolicy, exact: true },
-  { path: '/service-card', name: 'Service Card', component: ServiceCard, exact: true },
   { path: '/service-category', name: 'Service Category', component: ServiceCategory, exact: true },
   { path: '/service-category/add', name: 'Add Service Category', component: ServiceCategoryAdd, exact: true },
   { path: '/service-category/edit/:id', name: 'Edit Service Category', component: EditServiceCategory, exact: true },
+  { path: '/service-card', name: 'Service Card', component: ServiceCard, exact: true },
   { path: '/service-card/add', name: 'Add Service Card', component: AddServiceCard, exact: true },
   { path: '/service-card/edit/:id', name: 'Edit Service Card', component: EditServiceCard, exact: true },
   { path: '/services-at-home', name: 'Services At Home', component: ServicesAtHome, exact: true },
