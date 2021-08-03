@@ -274,7 +274,8 @@ const EditBanner = () => {
 												<Multiselect
 												options={stateArray} // Options to display in the dropdown
 												selectedValues={stateArray.filter((i,index) => ( states.toString().includes(i.id) ))} // Preselected value to persist in dropdown
-												onSelect={(e) => handleStateSelect(e)} // Function will trigger on select event
+												onRemove={(e) => handleStateSelect(e)} // Function will trigger on select event
+													onSelect={(e) => handleStateSelect(e)} // Function will trigger on select event
 												displayValue="state" // Property name to display in the dropdown options
 												/>
 												:"Loading States"}

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 const Toaster = React.lazy(() => import('./views/notifications/toaster/Toaster'));
 const Tables = React.lazy(() => import('./views/base/tables/Tables'));
@@ -175,6 +175,12 @@ const AddServiceSubPage = React.lazy(() => import('./views/serviceSubPages/AddSe
 const HeaderTabs = React.lazy(() => import('./views/headerTabs/HeaderTabs'));
 const EditHeaderTab = React.lazy(() => import('./views/headerTabs/EditHeaderTab'));
 const AddHeaderTab = React.lazy(() => import('./views/headerTabs/AddHeaderTab'));
+const BeddingSets = React.lazy(() => import('./views/beddingSets/BeddingSets'));
+const EditBeddingSets = React.lazy(() => import('./views/beddingSets/EditBeddingSets'));
+const AddBeddingSets = React.lazy(() => import('./views/beddingSets/AddBeddingSets'));
+const ComfortActionCards = React.lazy(() => import('./views/comfortAction/ComfortActionCards'));
+const EditComfortActionCards = React.lazy(() => import('./views/comfortAction/EditComfortActionCards'));
+const AddComfortActionCards = React.lazy(() => import('./views/comfortAction/AddComfortActionCards'));
 const Orders = React.lazy(() => import('./views/orders/Orders'));
 
 const routes = [
@@ -355,10 +361,16 @@ const routes = [
   { path: '/service-card', name: 'Service Card', component: ServiceCard, exact: true },
   { path: '/service-card/add', name: 'Add Service Card', component: AddServiceCard, exact: true },
   { path: '/service-card/edit/:id', name: 'Edit Service Card', component: EditServiceCard, exact: true },
-  { path: '/services-at-home', name: 'Services At Home', component: ServicesAtHome, exact: true },
+  { path: '/services-at-home', name: 'Services At Home', component: ServicesAtHome, exact: true },  
+  { path: '/comfort-card', name: 'Comfort Card', component: BeddingSets, exact: true },
+  { path: '/comfort-card/edit/:id', name: 'Edit Comfort Card', component: EditBeddingSets, exact: true },
+  { path: '/comfort-card/add/', name: 'Add Comfort Card', component: AddBeddingSets, exact: true },
   { path: '/header-tabs', name: 'Header Tabs', component: HeaderTabs, exact: true },
   { path: '/header-tabs/edit/:id', name: 'Edit Header Tab', component: EditHeaderTab, exact: true },
   { path: '/header-tabs/add/', name: 'Add Header Tab', component: AddHeaderTab, exact: true },
+  { path: '/comfort-action', name: 'Comfort Action Card', component: ComfortActionCards, exact: true },
+  { path: '/comfort-action/add', name: 'Add Comfort Action Card', component: AddComfortActionCards, exact: true },
+  { path: '/comfort-action/edit/', name: 'Edit Comfort Action Card', component: EditComfortActionCards, exact: true },
   { path: '/orders/', name: 'All Orders', component: Orders, exact: true },
 
 ];

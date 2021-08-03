@@ -277,7 +277,7 @@ const EditInnovationCard = () => {
 													onSelect={(e) => setAdvantages(e)}
 													name="advantagesArray"
 													// value={item.advantagesArray}
-													// onRemove={this.onRemove} // Function will trigger on remove event
+													onRemove={(e) => setAdvantages(e)} // Function will trigger on remove event
 													displayValue="advantage" // Property name to display in the dropdown options
 												/>
 											</CInputGroup>

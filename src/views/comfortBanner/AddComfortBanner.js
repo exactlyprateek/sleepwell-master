@@ -28,7 +28,6 @@ const axios = require('axios').default;
 
 
 const AddComfortBanner = () => {
-    const { control, handleSubmit, formState: { errors } } = useForm({ mode: 'all' });
     let history = useHistory();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -38,8 +37,6 @@ const AddComfortBanner = () => {
     const [isFeatured, setIsFeatured] = useState(true);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [bannerButtonText, setBannerButtonText] = useState('');
-    const [bannerButtonLink, setBannerButtonLink] = useState('');
     const [stateArray, setStateArray] = useState();
     const [states, setStates] = useState([]);
     const [textMessage, setTextMessage] = useState('');
@@ -47,14 +44,7 @@ const AddComfortBanner = () => {
 
     const jwtToken = sessionStorage.getItem("token");
 
-    //* banner button link
-    const bannerButtonLinkOnChange = (e) => {
-        setBannerButtonLink(e.target.value);
-    }
-    //* banner button text
-    const bannerButtonTextOnChange = (e) => {
-        setBannerButtonText(e.target.value);
-    }
+
     //* banner
     const bannerOnChange = (e) => {
         setBannerImage(e.target.files[0]);
@@ -113,11 +103,9 @@ const AddComfortBanner = () => {
         const status = isFeatured ? 1 : 0;
         formData.append('status', status);
         formData.append('image', bannerImage);
-        formData.append('shortOrder', shortOrder);
+        formData.append('sortOrder', shortOrder);
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('buttonText', bannerButtonText);
-        formData.append('buttonLink', bannerButtonLink);
         formData.append('states', states);
         // formData.append('content', content);
         // console.log(formData);
@@ -129,7 +117,7 @@ const AddComfortBanner = () => {
         //     }
         // }) 
         axios({
-            url: 'http://markbran.in/apis/admin/home/banner',
+            url: 'http://markbran.in/apis/admin/comfort/banner',
             method: "POST",
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -163,7 +151,7 @@ const AddComfortBanner = () => {
                             Add Banner
                         </CCardHeader>
                         <CCardBody>
-                            <CForm encType="multipart/form-data" onSubmit={onHandlerSubmit}>
+                            <CForm encType="multipart/form-data">
                                 <br />
                                 {
                                     error &&
@@ -191,7 +179,7 @@ const AddComfortBanner = () => {
                                     </CCol>
                                 </CRow>
 
-                                <CRow>
+                                {/* <CRow>
                                     <CCol xl="6">
                                         <CFormGroup>
                                             <CLabel htmlFor="shortItem">Button Text</CLabel>
@@ -208,7 +196,7 @@ const AddComfortBanner = () => {
                                             </CInputGroup>
                                         </CFormGroup>
                                     </CCol>
-                                </CRow>
+                                </CRow> */}
                                 <CRow>
                                     <CCol xs="6">
                                         <CFormGroup>
@@ -218,6 +206,7 @@ const AddComfortBanner = () => {
                                                     options={stateArray} // Options to display in the dropdown
                                                     // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
                                                     onSelect={(e) => handleStateSelect(e)} // Function will trigger on select event
+                                                    onRemove={(e) => handleStateSelect(e)} // Function will trigger on select event
                                                     displayValue="state" // Property name to display in the dropdown options
                                                 />
                                             </CInputGroup>
@@ -275,7 +264,7 @@ const AddComfortBanner = () => {
                                 </CRow> */}
                                 <CRow>
                                     <CCol xs="8">
-                                        <button className="btn btn-success" disabled={loading ? true : false} type="submit">{loading ? 'Loading...' : 'Add Banner'}</button>
+                                        <button  onClick={onHandlerSubmit }className="btn btn-success" disabled={loading ? true : false} type="submit">{loading ? 'Loading...' : 'Add Banner'}</button>
                                     </CCol>
                                 </CRow>
                             </CForm>

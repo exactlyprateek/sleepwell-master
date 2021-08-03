@@ -47,7 +47,7 @@ const ComfortBanners = () => {
     //* call delete api
     const deleteBanner = (bannerId) => {
         // alert(bannerId)
-        axios.delete(`http://markbran.in/apis/admin/home/banner/${bannerId}`, {
+        axios.delete(`http://markbran.in/apis/admin/comfort/banner/${bannerId}`, {
             headers: {
                 "auth-token": jwtToken //the token is a variable which holds the token
             }
@@ -71,7 +71,7 @@ const ComfortBanners = () => {
 
     //* get banner data
     const bannerAxios = () => {
-        axios.get('http://markbran.in/apis/admin/home/banner', {
+        axios.get('http://markbran.in/apis/admin/comfort/banner', {
             headers: {
                 "auth-token": jwtToken //the token is a variable which holds the token
             }
@@ -129,8 +129,6 @@ const ComfortBanners = () => {
                                     <th scope="col">Banner title</th>
                                     <th scope="col">Banner</th>
                                     <th scope="col">Sort Order</th>
-                                    <th scope="col">Button Text</th>
-                                    <th scope="col">Button Link</th>
                                     <th scope="col">Create at</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -144,9 +142,8 @@ const ComfortBanners = () => {
                                         <th scope="row">{index + 1}</th>
                                         <th scope="row">{item.title}</th>
                                         <td><img src={`${process.env.REACT_APP_BASE_URL}/${item.image}`} className="img-fluid" width="120px" alt="" /></td>
-                                        <td>{item.shortOrder}</td>
-                                        <th scope="col">{item.buttonText}</th>
-                                    <th scope="col">{item.buttonLink}</th>
+                                        <td>{item.sortOrder}</td>
+                                   
                                         <td>{dateFormat(item.createdAt, "mmmm dS, yyyy")}</td>
                                         <td>
                                             {/* <button type="button"  className="btn btn-sm btn-outline-warning">Edit</button> */}

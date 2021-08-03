@@ -49,7 +49,7 @@ const EditComfortBanner = () => {
 	//* get banner
 	const getBannerAxios = () => {
 		axios
-			.get(`http://markbran.in/apis/admin/home/banner/${bannerId.id}`, {
+			.get(`http://markbran.in/apis/admin/comfort/banner/${bannerId.id}`, {
 				headers: {
 					'auth-token': jwtToken //the token is a variable which holds the token
 				}
@@ -69,7 +69,7 @@ const EditComfortBanner = () => {
 			getBannerAxios();
 			setSortOrder(banner.soortOrder);
 			setStates(banner.states);
-			setSortOrder(banner.shortOrder);
+			setSortOrder(banner.sortOrder);
 			// setContent(banner.content);
 			// console.log(banner.image);
 			setIsFeatured(banner.status);
@@ -141,11 +141,9 @@ const EditComfortBanner = () => {
 
 		const formData = new FormData();
 		formData.append('image', bannerImage);
-		formData.append('shortOrder', sortOrder);
+		formData.append('sortOrder', sortOrder);
 		formData.append('title', title);
 		formData.append('description', description);
-		formData.append('buttonText', bannerButtonText);
-		formData.append('buttonLink', bannerButtonLink);
 		formData.append('status', isFeatured);
 		formData.append('states', states);
 		// formData.append('content', content);
@@ -153,7 +151,7 @@ const EditComfortBanner = () => {
 		// console.log(shortOrder);
 
 		axios
-			.patch(`http://markbran.in/apis/admin/home/banner/${bannerId.id}`, formData, {
+			.patch(`http://markbran.in/apis/admin/comfort/banner/${bannerId.id}`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					'auth-token': jwtToken //the token is a variable which holds the token
@@ -161,7 +159,7 @@ const EditComfortBanner = () => {
 			})
 			.then((response) => {
 				setLoading(false);
-				history.push('/banners');
+				history.push('/comfort-banner');
 				// console.log(response);
 			})
 			.catch((err) => {
@@ -237,7 +235,7 @@ const EditComfortBanner = () => {
 									</CCol>
 								</CRow>
 								<CRow>
-									<CCol xl="6">
+									{/* <CCol xl="6">
 										<CFormGroup>
 											<CLabel htmlFor="shortItem">Button Text</CLabel>
 											<CInputGroup className="mb-3">
@@ -264,7 +262,7 @@ const EditComfortBanner = () => {
 												/>
 											</CInputGroup>
 										</CFormGroup>
-									</CCol>
+									</CCol> */}
 									<CCol xs="6">
 										<CFormGroup>
 											<CLabel htmlFor="category">Select State</CLabel>
@@ -275,6 +273,7 @@ const EditComfortBanner = () => {
 												options={stateArray} // Options to display in the dropdown
 												selectedValues={stateArray.filter((i,index) => ( states.toString().includes(i.id) ))} // Preselected value to persist in dropdown
 												onSelect={(e) => handleStateSelect(e)} // Function will trigger on select event
+												onRemove={(e) => handleStateSelect(e)} // Function will trigger on select event
 												displayValue="state" // Property name to display in the dropdown options
 												/>
 												:"Loading States"}

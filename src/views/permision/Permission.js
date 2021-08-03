@@ -105,6 +105,7 @@ const Permission = () => {
                                                     options={sectionsList} // Options to display in the dropdown
                                                     // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
                                                     onSelect={onChangeSections} // Function will trigger on select event
+                                                    onRemove={onChangeSections} // Function will trigger on select event 
                                                     // onRemove={this.onRemove} // Function will trigger on remove event
                                                     displayValue="title" // Property name to display in the dropdown options
                                                 />

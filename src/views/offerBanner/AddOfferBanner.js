@@ -168,6 +168,7 @@ const AddOfferBanner = () => {
                                                     options={stateArray} // Options to display in the dropdown
                                                     // selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
                                                     onSelect={handleStateSelect} // Function will trigger on select event
+                                                    onRemove={handleStateSelect} // Function will trigger on select event
                                                     displayValue="state" // Property name to display in the dropdown options
                                                 />
                                             </CInputGroup>
